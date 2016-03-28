@@ -22,7 +22,8 @@ class Symbol(models.Model):
 
 class Position(models.Model):
     symbol = models.ForeignKey(Symbol)
-    start = models.FloatField()
+    start_price = models.FloatField()
+    start_date = models.DateTimeField()
     sl = models.FloatField()
     tp = models.FloatField()
     value = models.IntegerField()
