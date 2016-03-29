@@ -5,9 +5,14 @@ from .serializing import serialize
 
 # Create your views here.
 def types(request):
-    symbols = SymbolType.objects.all()
-    return render(request, 'test.html', serialize(symbols))
+    types = SymbolType.objects.all()
+    return render(request, 'test.html', serialize(types))
 
 def all_symbols(request):
-    symbols = SymbolType.objects.all()
+    types = SymbolType.objects.all()
+    symbols = {}
+    for type in types:
+        symbols[type.name] = Symbol.objects.filter(type_id=type)
+    print(symbols)
     return render(request, 'test.html', serialize(symbols))
+    # return render(request, 'test.html', {"data": 'test'})
