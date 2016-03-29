@@ -4,7 +4,14 @@ from django.db import models
 class User(models.Model):
     name = models.CharField(max_length=150)
     mail = models.EmailField()
-    password = models.CharField()
+    password = models.CharField(max_length=550)
+    def __str__(self):
+        return self.name
+
+class SymbolType(models.Model):
+    name = models.CharField(max_length=150)
+    def __str__(self):
+        return self.name
 
 class Account(models.Model):
     user = models.ForeignKey(User)
@@ -12,13 +19,12 @@ class Account(models.Model):
     value = models.IntegerField()
     leverage = models.IntegerField()
 
-class SymbolType(models.Model):
-    name = models.CharField()
-
 class Symbol(models.Model):
     type = models.ForeignKey(SymbolType)
-    name = models.CharField()
-    code = models.CharField()
+    name = models.CharField(max_length=150)
+    code = models.CharField(max_length=150)
+    def __str__(self):
+        return self.name
 
 class Position(models.Model):
     symbol = models.ForeignKey(Symbol)

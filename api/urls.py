@@ -1,5 +1,7 @@
 from django.conf.urls import url, include
+from .views import types, all_symbols
 
 urlpatterns = [
-    url(r'^symbols/', include('api.urls', namespace='api'))
+    url(r'^types', types, name='symbols'),
+    url(r'^symbols', all_symbols, name='symbols')
 ]
