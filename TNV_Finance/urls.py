@@ -16,8 +16,10 @@ Including another URLconf
 """
 from django.conf.urls import url, include
 from django.contrib import admin
+from front.views import registration
 
 urlpatterns = [
     url(r'^admin/', admin.site.urls),
+    url(r'^auth/', registration),
     url(r'^api/', include('api.urls', namespace='api'))
 ]

@@ -1,13 +1,7 @@
 from django.db import models
+from django.contrib.auth.models import User
 
 # Create your models here.
-class User(models.Model):
-    name = models.CharField(max_length=150)
-    mail = models.EmailField()
-    password = models.CharField(max_length=550)
-    def __str__(self):
-        return self.name
-
 class SymbolType(models.Model):
     name = models.CharField(max_length=150)
     def __str__(self):
@@ -27,9 +21,14 @@ class Symbol(models.Model):
         return self.name
 
 class Position(models.Model):
+    owner = models.ForeignKey(Account, default=1)
+    active = models.BooleanField(default=True)
     symbol = models.ForeignKey(Symbol)
     start_price = models.FloatField()
     start_date = models.DateTimeField()
+    end_price = models.FloatField(null=True)
+    end_date = models.DateTimeField(null=True)
+    profit = models.IntegerField(null=True)
     sl = models.FloatField()
     tp = models.FloatField()
     value = models.IntegerField()
