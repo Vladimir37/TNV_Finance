@@ -1,8 +1,8 @@
 from django.contrib.auth.models import User
 from django.views.decorators.http import require_http_methods
-from django.db.models import Q
 from django.shortcuts import render
-from api.serializing import serialize
+from django.http import HttpResponseRedirect
+from django.contrib import auth
 
 @require_http_methods(['POST'])
 def registration(request):
@@ -10,16 +10,33 @@ def registration(request):
     last_name = request.POST['last']
     username = request.POST['username']
     mail = request.POST['mail']
-    password = request.POST['pass']
+    password = request.POST['password']
 
-    # try:
-    #     User.objects.get(Q(username=username) | Q(email=mail))
-    #     return render(request, 'api.html', {'data'})
-    # except:
-    #     return render(request, 'api.html')
     if User.objects.filter(username=username).exists():
         return render(request, 'api.html', {'data': 1})
     elif User.objects.filter(email=mail).exists():
         return render(request, 'api.html', {'data': 2})
-    else:
+
+    try:
+        new_user = User.objects.create_user(username, mail, password)
+        new_user.first_name = first_name
+        new_user.last_name = last_name
+        new_user.save()
         return render(request, 'api.html', {'data': 0})
+    except:
+        return render(request, 'api.html', {'data': 3})
+
+@require_http_methods(['POST'])
+def login(request):
+    username = request.POST['username']
+    password = request.POST['password']
+    user = auth.authenticate(username=username, password=password)
+    if user is not None and user.is_active:
+        auth.login(request, user)
+        return render(request, 'api.html', {'data': 0})
+    else:
+        return render(request, 'api.html', {'data': 1})
+
+def logout(request):
+    auth.logout(request)
+    return HttpResponseRedirect('/login')
