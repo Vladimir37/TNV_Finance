@@ -1,5 +1,6 @@
 from django.contrib.auth.models import User
 from django.views.decorators.http import require_http_methods
+from django.contrib.auth.decorators import login_required
 from django.shortcuts import render
 from django.http import HttpResponseRedirect
 from django.contrib import auth
@@ -40,3 +41,19 @@ def login(request):
 def logout(request):
     auth.logout(request)
     return HttpResponseRedirect('/login')
+
+@login_required()
+def pass_change(request):
+    old_password = request.POST['old_password']
+    new_password = request.POST['new_password']
+    username = request.user
+    user = auth.authenticate(username=username, password=old_password)
+    if user is not None and user.is_active:
+        try:
+            user.set_password(new_password)
+            user.save()
+            return render(request, 'api.html', {'data': 0})
+        except:
+            return render(request, 'api.html', {'data': 1})
+    else:
+        return render(request, 'api.html', {'data': 1})

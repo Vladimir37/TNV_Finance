@@ -10,3 +10,7 @@ def login(request):
 @login_required()
 def cabinet(request):
     return render(request, 'cabinet.html')
+
+@login_required()
+def pass_change(request):
+    return render(request, 'pass_change.html')
