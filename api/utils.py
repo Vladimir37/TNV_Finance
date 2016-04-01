@@ -5,6 +5,8 @@ from django.shortcuts import render
 from django.http import HttpResponseRedirect
 from django.contrib import auth
 
+# users
+
 @require_http_methods(['POST'])
 def registration(request):
     first_name = request.POST['first']
