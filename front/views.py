@@ -14,3 +14,7 @@ def cabinet(request):
 @login_required()
 def pass_change(request):
     return render(request, 'pass_change.html')
+
+@login_required()
+def add_account(request):
+    return render(request, 'add_account.html')

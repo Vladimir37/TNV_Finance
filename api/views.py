@@ -1,6 +1,6 @@
 import time
 from django.shortcuts import render
-from api.models import User, Account, SymbolType, Symbol, Position
+from api.models import Account, SymbolType, Symbol, Position
 from api.serializing import serialize
 from finam_stock_data import get_data as stock_data
 

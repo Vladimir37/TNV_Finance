@@ -10,7 +10,7 @@ class SymbolType(models.Model):
 class Account(models.Model):
     user = models.ForeignKey(User)
     category = models.ForeignKey(SymbolType)
-    value = models.IntegerField()
+    value = models.FloatField()
     leverage = models.IntegerField()
 
 class Symbol(models.Model):

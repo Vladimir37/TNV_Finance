@@ -4,16 +4,17 @@ from django.contrib.auth.decorators import login_required
 from django.shortcuts import render
 from django.http import HttpResponseRedirect
 from django.contrib import auth
+from api.models import Account, SymbolType, Symbol, Position
 
 # users
 
 @require_http_methods(['POST'])
 def registration(request):
-    first_name = request.POST['first']
-    last_name = request.POST['last']
-    username = request.POST['username']
-    mail = request.POST['mail']
-    password = request.POST['password']
+    first_name = request.POST.get('first', 'user')
+    last_name = request.POST.get('last', 'user')
+    username = request.POST.get('username', 'user')
+    mail = request.POST.get('mail', 'user')
+    password = request.POST.get('password', 'user')
 
     if User.objects.filter(username=username).exists():
         return render(request, 'api.html', {'data': 1})
@@ -31,8 +32,8 @@ def registration(request):
 
 @require_http_methods(['POST'])
 def login(request):
-    username = request.POST['username']
-    password = request.POST['password']
+    username = request.POST.get('username', 'user')
+    password = request.POST.get('password', 'pass')
     user = auth.authenticate(username=username, password=password)
     if user is not None and user.is_active:
         auth.login(request, user)
@@ -46,8 +47,8 @@ def logout(request):
 
 @login_required()
 def pass_change(request):
-    old_password = request.POST['old_password']
-    new_password = request.POST['new_password']
+    old_password = request.POST.get('old_password', 'old pass')
+    new_password = request.POST.get('new_password', 'new pass')
     username = request.user
     user = auth.authenticate(username=username, password=old_password)
     if user is not None and user.is_active:
@@ -57,5 +58,26 @@ def pass_change(request):
             return render(request, 'api.html', {'data': 0})
         except:
             return render(request, 'api.html', {'data': 1})
+    else:
+        return render(request, 'api.html', {'data': 1})
+
+@login_required()
+def add_account(request):
+    value = request.POST.get('value', 'Incorrect')
+    category = request.POST.get('category', 'category')
+    leverage = request.POST.get('leverage', 'leverage')
+    available_leverages = [1, 5, 10, 20, 50, 100, 200]
+    try:
+        value = int(value)
+        leverage = int(leverage)
+        available_leverages.index(leverage)
+        symbol_type = SymbolType.objects.get(pk=category)
+    except:
+        return render(request, 'api.html', {'data': 1})
+    if value > 0:
+        current_user = request.user
+
+        Account.objects.create(user=current_user, category=symbol_type, value=value, leverage=leverage)
+        return render(request, 'api.html', {'data': 0})
     else:
         return render(request, 'api.html', {'data': 1})
