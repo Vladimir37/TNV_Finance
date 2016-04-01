@@ -5,6 +5,9 @@ from django.shortcuts import render
 from django.http import HttpResponseRedirect
 from django.contrib import auth
 from api.models import Account, SymbolType, Symbol, Position
+from finam_stock_data import get_data as stock_data
+from googlefinance import getQuotes
+import time
 
 # users
 
@@ -92,3 +95,23 @@ def delete_account(request):
     except:
         return render(request, 'api.html', {'data': 1})
 
+@login_required()
+def create_account(request):
+    current_user = request.user
+    current_account = request.POST.get('account', 0)
+    target_symbol = request.POST.get('symbol', 'Incorrect')
+    if request.POST.get('type', 'Incorrect') == 'buy':
+        type_is_buy = True
+    else:
+        type_is_buy = False
+
+
+def get_current(symbol_name):
+    try:
+        symbol = Symbol.objects.get(code=symbol_name)
+        symbol_type = SymbolType.objects.get(pk=symbol.type_id)
+        if symbol_type.currency:
+            symbol_name = 'CURRENCY:' + symbol_name
+        return float(getQuotes(symbol_name)[0]['LastTradePrice'])
+    except:
+        return False

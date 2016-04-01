@@ -4,6 +4,7 @@ from django.contrib.auth.models import User
 # Create your models here.
 class SymbolType(models.Model):
     name = models.CharField(max_length=150)
+    currency = models.BooleanField(default=False)
     def __str__(self):
         return self.name
 
@@ -24,6 +25,7 @@ class Position(models.Model):
     owner = models.ForeignKey(Account, default=1)
     active = models.BooleanField(default=True)
     symbol = models.ForeignKey(Symbol)
+    buy = models.BooleanField(default=True)
     start_price = models.FloatField()
     start_date = models.DateTimeField()
     end_price = models.FloatField(null=True)
