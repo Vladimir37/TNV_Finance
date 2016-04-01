@@ -76,8 +76,19 @@ def add_account(request):
         return render(request, 'api.html', {'data': 1})
     if value > 0:
         current_user = request.user
-
         Account.objects.create(user=current_user, category=symbol_type, value=value, leverage=leverage)
         return render(request, 'api.html', {'data': 0})
     else:
         return render(request, 'api.html', {'data': 1})
+
+@login_required()
+def delete_account(request):
+    account = request.POST.get('account', 'Incorrect')
+    current_user = request.user
+    try:
+        target_account = Account.objects.get(pk=account, user=current_user)
+        target_account.delete()
+        return render(request, 'api.html', {'data': 0})
+    except:
+        return render(request, 'api.html', {'data': 1})
+

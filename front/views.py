@@ -18,3 +18,7 @@ def pass_change(request):
 @login_required()
 def add_account(request):
     return render(request, 'add_account.html')
+
+@login_required()
+def delete_account(request):
+    return render(request, 'delete_account.html')
