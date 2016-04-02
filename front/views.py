@@ -22,3 +22,7 @@ def add_account(request):
 @login_required()
 def delete_account(request):
     return render(request, 'delete_account.html')
+
+@login_required()
+def create_position(request):
+    return render(request, 'create_position.html')

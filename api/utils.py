@@ -7,6 +7,7 @@ from django.contrib import auth
 from api.models import Account, SymbolType, Symbol, Position
 from finam_stock_data import get_data as stock_data
 from googlefinance import getQuotes
+from datetime import datetime
 import time
 
 # users
@@ -96,15 +97,46 @@ def delete_account(request):
         return render(request, 'api.html', {'data': 1})
 
 @login_required()
-def create_account(request):
+def create_position(request):
     current_user = request.user
-    current_account = request.POST.get('account', 0)
-    target_symbol = request.POST.get('symbol', 'Incorrect')
+    account_num = request.POST.get('account', 0)
+    symbol_num = request.POST.get('symbol', 'Incorrect')
+    value = request.POST.get('value', 1)
+    start_date = datetime.now()
+    take_profit = request.POST.get('take_profit', None)
+    stop_loss = request.POST.get('stop_loss', None)
+    type_is_buy = False
     if request.POST.get('type', 'Incorrect') == 'buy':
         type_is_buy = True
-    else:
-        type_is_buy = False
-
+    try:
+        target_symbol = Symbol.objects.get(code=symbol_num)
+        start_price = get_current(symbol_num)
+        account = Account.objects.get(pk=account_num, user=current_user)
+        value = int(value)
+        if value < 0 or value > account.leverage * account.value:
+            raise AttributeError
+        if take_profit:
+            take_profit = float(take_profit)
+            if type_is_buy and (take_profit < start_price):
+                raise AttributeError
+            elif not type_is_buy and (take_profit > start_price):
+                raise AttributeError
+        else:
+            take_profit = None
+        if stop_loss:
+            stop_loss = float(stop_loss)
+            if type_is_buy and (stop_loss > start_price):
+                raise AttributeError
+            elif not type_is_buy and (stop_loss < start_price):
+                raise AttributeError
+        else:
+            stop_loss = None
+    except:
+        return render(request, 'api.html', {'data': 1})
+    Position.objects.create(owner=account, symbol=target_symbol, buy=type_is_buy,
+                                start_price=start_price, start_date=start_date, tp=take_profit,
+                                sl=stop_loss, value=value)
+    return render(request, 'api.html', {'data': 0})
 
 def get_current(symbol_name):
     try:
