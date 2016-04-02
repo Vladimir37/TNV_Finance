@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Close position</title>
+    </head>
+    <body>
+        <form action="/api/close_position" method="post">
+            {% csrf_token %}
+            <input type="text" name="account" placeholder="account" required/>
+            <br/>
+            <input type="text" name="position" placeholder="position" required/>
+            <br/>
+            <button type="submit">Close position</button>
+        </form>
+    </body>
+</html>

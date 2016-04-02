@@ -26,3 +26,7 @@ def delete_account(request):
 @login_required()
 def create_position(request):
     return render(request, 'create_position.html')
+
+@login_required()
+def close_position(request):
+    return render(request, 'close_position.html')

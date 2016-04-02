@@ -33,4 +33,5 @@ class Position(models.Model):
     profit = models.IntegerField(null=True)
     sl = models.FloatField(null=True)
     tp = models.FloatField(null=True)
-    value = models.IntegerField()
+    value = models.FloatField()
+    closing_way = models.IntegerField(null=True)

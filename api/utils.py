@@ -138,6 +138,24 @@ def create_position(request):
                                 sl=stop_loss, value=value)
     return render(request, 'api.html', {'data': 0})
 
+@login_required()
+def manually_close_position(request):
+    current_user = request.user
+    account_num = request.POST.get('account', 0)
+    position_num = request.POST.get('position', 0)
+    try:
+        account = Account.objects.get(pk=account_num, user=current_user)
+        position = Position.objects.get(pk=position_num, owner=account, active=True)
+        close_result = close_position(position, account, 0)
+        if close_result:
+            return render(request, 'api.html', {'data': 0})
+        else:
+            return render(request, 'api.html', {'data': 1})
+    except:
+        return render(request, 'api.html', {'data': 1})
+
+# helper function
+
 def get_current(symbol_name):
     try:
         symbol = Symbol.objects.get(code=symbol_name)
@@ -145,5 +163,24 @@ def get_current(symbol_name):
         if symbol_type.currency:
             symbol_name = 'CURRENCY:' + symbol_name
         return float(getQuotes(symbol_name)[0]['LastTradePrice'])
+    except:
+        return False
+
+def close_position(position, account, type):
+    symbol_code = position.symbol.code
+    end_date = datetime.now()
+    end_price = get_current(symbol_code)
+    raw_profit = (end_price * position.value) - (position.start_price * position.value)
+    profit = float('%.2f' % raw_profit)
+    position.active = False
+    position.end_price = end_price
+    position.end_date = end_date
+    position.profit = profit
+    position.closing_way = type
+    account.value += profit
+    try:
+        position.save()
+        account.save()
+        return True
     except:
         return False
