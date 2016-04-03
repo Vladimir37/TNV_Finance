@@ -8,7 +8,6 @@ from api.models import Account, SymbolType, Symbol, Position
 from finam_stock_data import get_data as stock_data
 from googlefinance import getQuotes
 from datetime import datetime
-import time
 
 # users
 
@@ -49,6 +48,7 @@ def logout(request):
     auth.logout(request)
     return HttpResponseRedirect('/login')
 
+@require_http_methods(['POST'])
 @login_required()
 def pass_change(request):
     old_password = request.POST.get('old_password', 'old pass')
@@ -65,6 +65,7 @@ def pass_change(request):
     else:
         return render(request, 'api.html', {'data': 1})
 
+@require_http_methods(['POST'])
 @login_required()
 def add_account(request):
     value = request.POST.get('value', 'Incorrect')
@@ -85,6 +86,7 @@ def add_account(request):
     else:
         return render(request, 'api.html', {'data': 1})
 
+@require_http_methods(['POST'])
 @login_required()
 def delete_account(request):
     account = request.POST.get('account', 'Incorrect')
@@ -96,6 +98,7 @@ def delete_account(request):
     except:
         return render(request, 'api.html', {'data': 1})
 
+@require_http_methods(['POST'])
 @login_required()
 def create_position(request):
     current_user = request.user
@@ -111,7 +114,7 @@ def create_position(request):
     try:
         target_symbol = Symbol.objects.get(code=symbol_num)
         start_price = get_current(symbol_num)
-        account = Account.objects.get(pk=account_num, user=current_user)
+        account = Account.objects.get(pk=account_num, user=current_user, active=True)
         value = int(value)
         if value < 0 or value > account.leverage * account.value:
             raise AttributeError
@@ -138,6 +141,7 @@ def create_position(request):
                                 sl=stop_loss, value=value)
     return render(request, 'api.html', {'data': 0})
 
+@require_http_methods(['POST'])
 @login_required()
 def manually_close_position(request):
     current_user = request.user
@@ -146,7 +150,7 @@ def manually_close_position(request):
     try:
         account = Account.objects.get(pk=account_num, user=current_user)
         position = Position.objects.get(pk=position_num, owner=account, active=True)
-        close_result = close_position(position, account, 0)
+        close_result = close_position(position, 0)
         if close_result:
             return render(request, 'api.html', {'data': 0})
         else:
@@ -166,11 +170,19 @@ def get_current(symbol_name):
     except:
         return False
 
-def close_position(position, account, type):
+def margin_call_check(account):
+    if account.value < 0:
+        account.active = False
+
+def close_position(position, type):
     symbol_code = position.symbol.code
+    account = position.owner
     end_date = datetime.now()
     end_price = get_current(symbol_code)
-    raw_profit = (end_price * position.value) - (position.start_price * position.value)
+    if position.buy:
+        raw_profit = (end_price * position.value) - (position.start_price * position.value)
+    else:
+        raw_profit = (position.start_price * position.value) - (end_price * position.value)
     profit = float('%.2f' % raw_profit)
     position.active = False
     position.end_price = end_price
@@ -181,6 +193,7 @@ def close_position(position, account, type):
     try:
         position.save()
         account.save()
+        margin_call_check(account)
         return True
     except:
         return False

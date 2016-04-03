@@ -13,6 +13,7 @@ class Account(models.Model):
     category = models.ForeignKey(SymbolType)
     value = models.FloatField()
     leverage = models.IntegerField()
+    active = models.BooleanField(default=True)
 
 class Symbol(models.Model):
     type = models.ForeignKey(SymbolType)
