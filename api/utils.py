@@ -173,6 +173,7 @@ def get_current(symbol_name):
 def margin_call_check(account):
     if account.value < 0:
         account.active = False
+        account.save()
 
 def close_position(position, type):
     symbol_code = position.symbol.code
