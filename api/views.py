@@ -1,10 +1,11 @@
-import time
 from django.shortcuts import render
+from django.contrib.auth.decorators import login_required
+import time
 from api.models import Account, SymbolType, Symbol, Position
 from api.serializing import serialize
 from finam_stock_data import get_data as stock_data
 
-# Create your views here.
+# for all
 def types(request):
     types = SymbolType.objects.all()
     return render(request, 'api.html', serialize(types))
@@ -16,11 +17,11 @@ def all_symbols(request):
         symbols[type.name] = Symbol.objects.filter(type_id=type)
     return render(request, 'api.html', serialize(symbols))
 
-def get_today(request):
+def get_quotes(request):
     symbol = request.GET.get('symbol', 'EURUSD')
     period = request.GET.get('period', 'hour')
     symbol_check = Symbol.objects.filter(code=symbol).exists()
-    period_types = ['tick', 'min', '5min', '10min', '15min', '30min', 'hour', 'daily', 'week', 'month']
+    period_types = ['min', '5min', '15min', '30min', 'hour', 'daily']
     try:
         period_types.index(period)
     except:
@@ -28,6 +29,34 @@ def get_today(request):
     if not symbol_check:
         return render(request, 'api.html', {'data': 2})
     time_now = int(time.time())
-    time_yesterday = time_now - 86400
+    if period == 'min' or period == '5min' or period == '15min':
+        interval = 21600
+    elif period == '30min' or period == 'hour':
+        interval = 43200
+    elif period == 'hour':
+        interval = 86400
+    else:
+        interval = 1296000
+    time_yesterday = time_now - interval
     today_data = stock_data(time_yesterday, time_now, period, symbol)
     return render(request, 'api.html', {'data': today_data})
+
+# for users
+@login_required()
+def get_accounts(request):
+    username = request.user
+    active = bool(request.GET.get('active', 0))
+    accounts = Account.objects.filter(user=username, active=active)
+    return render(request, 'api.html', serialize(accounts))
+
+@login_required()
+def get_positions(request):
+    username = request.user
+    active = bool(request.GET.get('active', 0))
+    try:
+        account_num = int(request.GET.get('account', 0))
+        target_account = Account.objects.get(pk=account_num, user=username)
+        positions = Position.objects.filter(owner=target_account, active=active)
+        return render(request, 'api.html', serialize(positions))
+    except:
+        return render(request, 'api.html', {'data': 1})
