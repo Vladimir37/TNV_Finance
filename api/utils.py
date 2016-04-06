@@ -174,6 +174,9 @@ def margin_call_check(account):
     if account.value < 0:
         account.active = False
         account.save()
+        all_positions = Position.objects.filter(active=True, owner=account)
+        for position in all_positions:
+            close_position(position, 3)
 
 def close_position(position, type):
     symbol_code = position.symbol.code

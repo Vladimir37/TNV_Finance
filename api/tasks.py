@@ -13,6 +13,8 @@ def stop_loss():
         symbol_code = Symbol.objects.get(pk=symbol_num['symbol']).code
         all_symbols[symbol_code] = get_current(symbol_code)
     for position in all_positions:
+        print(position.sl)
+        print(all_symbols[position.symbol.code])
         if position.buy == True and position.sl >= all_symbols[position.symbol.code]:
             close_position(position, 2)
             margin_call_check(position.owner)
