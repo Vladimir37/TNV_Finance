@@ -1,0 +1,15 @@
+.wrapper {
+    width: 950px;
+    margin: 0 auto;
+}
+.jumbotron {
+    margin: 20px auto;
+    padding: 15px;
+}
+.navbar-brand {
+    font-weight: bold;
+}
+.navbar-nav {
+    float: right;
+    font-weight: bold;
+}
