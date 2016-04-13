@@ -1,5 +1,5 @@
 app.factory('indexValues', ['$http', function($http) {
-    var requested_symbols = ['EURUSD', 'GBPUSD', 'YHOO'];
+    var requested_symbols = ['EURUSD', 'GBPUSD', 'YHOO', 'MSFT', 'AUDUSD', 'DAX'];
     var symbols_req = {
         symbols: JSON.stringify(requested_symbols)
     };

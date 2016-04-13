@@ -17,3 +17,34 @@
     text-align: center;
     margin-bottom: 30px;
 }
+.index_symbols {
+    margin: 20px 0;
+}
+.index_symbol article {
+    display: inline-block;
+    font-size: 18px;
+}
+.index_symbol .value {
+    min-width: 65px;
+}
+.index_symbol .name {
+    min-width: 75px;
+}
+.arrow {
+    height: 35px;
+    margin-top: -3px;
+}
+.index_symbol .name, .index_symbol .value {
+    text-align: center;
+    padding: 2px;
+    border: 1px solid #000000;
+}
+
+
+/* helpers*/
+.red {
+    color: red;
+}
+.green {
+    color: green;
+}

@@ -2,6 +2,7 @@ from django.conf.urls import url
 from front.views import registration, login, cabinet, pass_change, add_account, delete_account, create_position, close_position
 
 urlpatterns = [
+    url(r'^', registration, name='index'),
     url(r'^registration/', registration, name='registration'),
     url(r'^login/', login, name='login'),
     url(r'^pass_change/', pass_change, name='pass_change'),

@@ -5,7 +5,7 @@ import json
 from api.models import Account, SymbolType, Symbol, Position
 from api.serializing import serialize
 from finam_stock_data import get_data as stock_data
-from api.utils import get_current
+from api.utils import get_current, get_symbol_state
 
 # for all
 def types(request):
@@ -50,7 +50,10 @@ def get_current_many(request):
         prices = {}
         for symbol in symbols:
             price = get_current(symbol)
-            prices[symbol] = price
+            prices[symbol] = {
+                'price': price,
+                'state': get_symbol_state(symbol)
+            }
         return render(request, 'api.html', {'data': "'" + json.dumps(prices) + "'"})
     except:
         return render(request, 'api.html', {'data': 1})

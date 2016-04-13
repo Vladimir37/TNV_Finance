@@ -1,5 +1,7 @@
-function decodeHtml(html) {
+function getAPI(html) {
     var txt = document.createElement("textarea");
     txt.innerHTML = html;
-    return txt.value;
+    var result = txt.value;
+    result = JSON.parse(result.slice(1, -1));
+    return result;
 }

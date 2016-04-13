@@ -40,10 +40,37 @@
     <section class="wrapper jumbotron">
         <img src="/static/imgs/staff/logo.png" alt="logo" class="big_logo"/>
         <section class="index_symbols" ng-controller="indexSymbols">
-            <article class="index_symbol" ng-repeat="day in symbol_values">
-                {[ day.data ]}
+            <article class="row">
+                <article class="index_symbol col-md-4" ng-repeat="(symbol, value) in symbol_values">
+                    <article class="name">{[ symbol ]}</article>
+                    <article class="value {[ value.color ]}">{[ value.price ]}</article>
+                    <img class="arrow" ng-src="{[ '/static/imgs/staff/' + value.arrow ]}" alt="arrow"/>
+                </article>
             </article>
         </section>
+        <section class="benefits">
+            <article class="row">
+                <article class="col-md-6 benefit">
+                    <img src="/static/imgs/staff/dollar.png" alt="dollar"/>
+                    <article class="text">Хотя тут используется один контроллер, но для каждого представления, используюего директиву ng-controller, будет создаваться свой отдельный объект контроллера и соответственно свой объект $scope.</article>
+                </article>
+                <article class="col-md-6 benefit">
+                    <img src="/static/imgs/staff/dollar.png" alt="dollar"/>
+                    <article class="text">Хотя тут используется один контроллер, но для каждого представления, используюего директиву ng-controller, будет создаваться свой отдельный объект контроллера и соответственно свой объект $scope.</article>
+                </article>
+            </article>
+            <article class="row">
+                <article class="col-md-6 benefit">
+                    <img src="/static/imgs/staff/dollar.png" alt="dollar"/>
+                    <article class="text">Хотя тут используется один контроллер, но для каждого представления, используюего директиву ng-controller, будет создаваться свой отдельный объект контроллера и соответственно свой объект $scope.</article>
+                </article>
+                <article class="col-md-6 benefit">
+                    <img src="/static/imgs/staff/dollar.png" alt="dollar"/>
+                    <article class="text">Хотя тут используется один контроллер, но для каждого представления, используюего директиву ng-controller, будет создаваться свой отдельный объект контроллера и соответственно свой объект $scope.</article>
+                </article>
+            </article>
+        </section>
+        <button class="btn btn-primary btn-lg">Sign up</button>
         {% block content %}
             Test
         {% endblock %}

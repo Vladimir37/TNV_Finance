@@ -200,3 +200,8 @@ def close_position(position, type):
         return True
     except:
         return False
+
+def get_symbol_state(code):
+    current_date = datetime.now()
+    code_hash = hash(code + str(current_date.year) + str(current_date.day) + str(current_date.hour))
+    return code_hash % 2 == 0
