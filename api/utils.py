@@ -5,7 +5,6 @@ from django.shortcuts import render
 from django.http import HttpResponseRedirect
 from django.contrib import auth
 from api.models import Account, SymbolType, Symbol, Position
-from finam_stock_data import get_data as stock_data
 from googlefinance import getQuotes
 from datetime import datetime
 

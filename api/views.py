@@ -1,9 +1,11 @@
 from django.shortcuts import render
 from django.contrib.auth.decorators import login_required
 import time
+import json
 from api.models import Account, SymbolType, Symbol, Position
 from api.serializing import serialize
 from finam_stock_data import get_data as stock_data
+from api.utils import get_current
 
 # for all
 def types(request):
@@ -40,6 +42,18 @@ def get_quotes(request):
     time_yesterday = time_now - interval
     today_data = stock_data(time_yesterday, time_now, period, symbol)
     return render(request, 'api.html', {'data': today_data})
+
+def get_current_many(request):
+    try:
+        symbols_str = request.GET.get('symbols', 0)
+        symbols = json.loads(symbols_str)
+        prices = {}
+        for symbol in symbols:
+            price = get_current(symbol)
+            prices[symbol] = price
+        return render(request, 'api.html', {'data': "'" + json.dumps(prices) + "'"})
+    except:
+        return render(request, 'api.html', {'data': 1})
 
 # for users
 @login_required()
