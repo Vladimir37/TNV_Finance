@@ -12,11 +12,11 @@ from datetime import datetime
 
 @require_http_methods(['POST'])
 def registration(request):
-    first_name = request.POST.get('first', 'user')
-    last_name = request.POST.get('last', 'user')
-    username = request.POST.get('username', 'user')
-    mail = request.POST.get('mail', 'user')
-    password = request.POST.get('password', 'user')
+    first_name = request.POST.get('first', 'first')
+    last_name = request.POST.get('last', 'last')
+    username = request.POST.get('username', 'username')
+    mail = request.POST.get('mail', 'mail')
+    password = request.POST.get('password', 'password')
 
     if User.objects.filter(username=username).exists():
         return render(request, 'api.html', {'data': 1})
