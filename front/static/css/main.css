@@ -39,7 +39,10 @@
     padding: 2px;
     border: 1px solid #000000;
 }
-
+.small_form {
+    width: 400px;
+    margin: auto;
+}
 
 /* helpers*/
 .red {

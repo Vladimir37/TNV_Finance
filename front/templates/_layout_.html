@@ -15,24 +15,24 @@
     {% if user.is_authenticated %}
         <nav class="navbar navbar-inverse navbar-fixed-top">
         <article class="wrapper">
-            <a class="navbar-brand" href="#">TNV Finance</a>
+            <a class="navbar-brand" href="/">TNV Finance</a>
             <ul class="nav navbar-nav">
                 <li><a href="">Positions</a></li>
                 <li><a href="">Accounts</a></li>
                 <li><a href="">Charts</a></li>
-                <li><a href="">Log out</a></li>
+                <li><a href="/api/logout">Log out</a></li>
         </ul>
         </article>
     </nav>
     {% else %}
         <nav class="navbar navbar-inverse navbar-fixed-top">
         <article class="wrapper">
-            <a class="navbar-brand" href="#">TNV Finance</a>
+            <a class="navbar-brand" href="/">TNV Finance</a>
             <ul class="nav navbar-nav">
                 <li><a href="">Charts</a></li>
                 <li><a href="">Tables</a></li>
-                <li><a href="">Log in</a></li>
-                <li><a href="">Sign Up</a></li>
+                <li><a href="/login">Log in</a></li>
+                <li><a href="/registration">Sign Up</a></li>
         </ul>
         </article>
     </nav>
@@ -64,6 +64,7 @@
     </div>
     {# Main content#}
     <section class="wrapper jumbotron">
+        {% block content %}
         <img src="/static/imgs/staff/logo.png" alt="logo" class="big_logo"/>
         <section class="index_symbols" ng-controller="indexSymbols">
             <article class="row">
@@ -96,9 +97,7 @@
                 </article>
             </article>
         </section>
-        <button class="btn btn-primary btn-lg" data-toggle="modal" data-target="#modal">Sign up</button>
-        {% block content %}
-
+        <button class="btn btn-primary btn-lg" data-toggle="modal" data-target="#modal">Get started!</button>
         {% endblock %}
     </section>
     {#  Angular  #}

@@ -1,15 +1,6 @@
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import render
 
-def index(request):
-    return render(request, '_layout_.html')
-
-def registration(request):
-    return render(request, '_layout_.html')
-
-def login(request):
-    return render(request, 'login.html')
-
 @login_required()
 def cabinet(request):
     return render(request, 'cabinet.html')

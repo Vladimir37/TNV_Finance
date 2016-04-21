@@ -46,3 +46,34 @@ app.controller('registration', ['$scope', '$http', function($scope, $http) {
         }
     }
 }]);
+
+app.controller('login', ['$scope', '$http', function($scope, $http) {
+    $scope.userdata = {};
+    $scope.error_message = null;
+    $scope.submit = function() {
+        if($scope.login.$valid) {
+            $http({
+                method: 'POST',
+                url: '/api/login',
+                headers: {'Content-Type': 'application/x-www-form-urlencoded'},
+                data: $.param($scope.userdata)
+            }).then(function(res) {
+                if(res.data == 0) {
+                    window.location.pathname = '/cabinet';
+                }
+                else {
+                    $scope.error_message = 'Incorrect login or password!';
+                }
+            }).catch(function(err) {
+                console.log(err);
+                $scope.error_message = 'Server error';
+            });
+        }
+    }
+}]);
+
+app.controller('logout',  ['$scope', '$http', function($scope, $http) {
+    $scope.logout = function() {
+        //
+    }
+}]);
