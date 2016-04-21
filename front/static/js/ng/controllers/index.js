@@ -1,6 +1,6 @@
 app.controller('indexSymbols', ['$scope', 'indexValues', function($scope, indexValues) {
     indexValues.then(function(data) {
-        var values = getAPI(data.data);
+        var values = data.data;
         for(var symbol in values) {
             var state = values[symbol].state;
             values[symbol] = {
@@ -72,8 +72,8 @@ app.controller('login', ['$scope', '$http', function($scope, $http) {
     }
 }]);
 
-app.controller('logout',  ['$scope', '$http', function($scope, $http) {
-    $scope.logout = function() {
-        //
-    }
+app.controller('tables',  ['$scope', 'allSymbols', function($scope, allSymbols) {
+    allSymbols.then(function(symbols) {
+        console.log(symbols);
+    });
 }]);

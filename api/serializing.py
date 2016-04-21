@@ -1,12 +1,10 @@
 from django.core import serializers
 from django.db.models.query import QuerySet
+import json
 
 def serialize(obj):
     result_data = recursive_convert(obj)
-    result = {
-        'data': result_data
-    }
-    return result
+    return result_data
 
 
 def recursive_convert(obj):

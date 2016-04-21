@@ -7,6 +7,8 @@ from api.serializing import serialize
 from finam_stock_data import get_data as stock_data
 from api.utils import get_current, get_symbol_state
 
+from django.http import HttpResponse
+
 # for all
 def types(request):
     types = SymbolType.objects.all()
@@ -16,8 +18,8 @@ def all_symbols(request):
     types = SymbolType.objects.all()
     symbols = {}
     for type in types:
-        symbols[type.name] = Symbol.objects.filter(type_id=type)
-    return render(request, 'api.html', serialize(symbols))
+        symbols[type.name] = list(Symbol.objects.filter(type_id=type).values())
+    return HttpResponse(json.dumps(symbols), content_type='application/json')
 
 def get_quotes(request):
     symbol = request.GET.get('symbol', 'EURUSD')
@@ -44,8 +46,9 @@ def get_quotes(request):
     return render(request, 'api.html', {'data': today_data})
 
 def get_current_many(request):
-    try:
+    # try:
         symbols_str = request.GET.get('symbols', 0)
+        print(request.GET)
         symbols = json.loads(symbols_str)
         prices = {}
         for symbol in symbols:
@@ -54,9 +57,9 @@ def get_current_many(request):
                 'price': price,
                 'state': get_symbol_state(symbol)
             }
-        return render(request, 'api.html', {'data': "'" + json.dumps(prices) + "'"})
-    except:
-        return render(request, 'api.html', {'data': 1})
+        return HttpResponse(json.dumps(prices), content_type='application/json')
+    # except:
+    #     return HttpResponse(json.dumps(1), content_type='application/json')
 
 # for users
 @login_required()
@@ -76,4 +79,4 @@ def get_positions(request):
         positions = Position.objects.filter(owner=target_account, active=active)
         return render(request, 'api.html', serialize(positions))
     except:
-        return render(request, 'api.html', {'data': 1})
+        return HttpResponse(json.dumps(1), content_type='application/json')

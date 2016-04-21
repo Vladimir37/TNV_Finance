@@ -13,3 +13,14 @@ app.factory('indexValues', ['$http', function($http) {
         return err;
     });
 }]);
+
+app.service('allSymbols', ['$http', function($http) {
+    return $http({
+        url: '/api/symbols',
+        method: 'GET'
+    }).success(function(data) {
+        return data;
+    }).error(function(err) {
+        return err;
+    });
+}]);
