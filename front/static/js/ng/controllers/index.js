@@ -1,15 +1,7 @@
 app.controller('indexSymbols', ['$scope', 'indexValues', function($scope, indexValues) {
     indexValues.then(function(data) {
-        var values = data.data;
-        for(var symbol in values) {
-            var state = values[symbol].state;
-            values[symbol] = {
-                price: values[symbol].price,
-                color: state > 0.5 ? 'red' : 'green',
-                arrow: state > 0.5 ? 'a_down.png' : 'a_up.png'
-            }
-        }
-        $scope.symbol_values = values;
+        $scope.symbol_values = data;
+        console.log(data);
     }).catch(function(err) {
         console.log('ERROR');
         console.log(err);
@@ -74,6 +66,9 @@ app.controller('login', ['$scope', '$http', function($scope, $http) {
 
 app.controller('tables',  ['$scope', 'allSymbols', function($scope, allSymbols) {
     allSymbols.then(function(symbols) {
-        console.log(symbols);
+        $scope.symbol_types = symbols;
+    }).catch(function(err) {
+        console.log(err);
+        $scope.error_message = 'Server error';
     });
 }]);

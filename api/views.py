@@ -46,9 +46,8 @@ def get_quotes(request):
     return render(request, 'api.html', {'data': today_data})
 
 def get_current_many(request):
-    # try:
+    try:
         symbols_str = request.GET.get('symbols', 0)
-        print(request.GET)
         symbols = json.loads(symbols_str)
         prices = {}
         for symbol in symbols:
@@ -58,8 +57,8 @@ def get_current_many(request):
                 'state': get_symbol_state(symbol)
             }
         return HttpResponse(json.dumps(prices), content_type='application/json')
-    # except:
-    #     return HttpResponse(json.dumps(1), content_type='application/json')
+    except:
+        return HttpResponse(json.dumps(1), content_type='application/json')
 
 # for users
 @login_required()

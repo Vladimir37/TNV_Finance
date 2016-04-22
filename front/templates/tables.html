@@ -1,7 +1,17 @@
 {% extends "_layout_.html" %}
 
 {% block content %}
+    <h2>Tables</h2>
     <section class="all_tables" ng-controller="tables">
-        //
+        <article class="table_type" ng-repeat="(type, symbols) in symbol_types">
+            <h3>{[ type ]}</h3>
+            <article class="row">
+                <article class="index_symbol col-md-3" ng-repeat="symbol in symbols">
+                    <article class="name">{[ symbol.name ]}</article>
+                    <article class="value {[ symbol.color ]}">{[ symbol.price ]}</article>
+                    <img class="arrow" ng-src="{[ '/static/imgs/staff/' + symbol.arrow ]}" alt="arrow"/>
+                </article>
+            </article>
+        </article>
     </section>
 {% endblock %}
