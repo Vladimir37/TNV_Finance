@@ -72,3 +72,13 @@ app.controller('tables',  ['$scope', 'allSymbols', function($scope, allSymbols) 
         $scope.error_message = 'Server error';
     });
 }]);
+
+app.controller('allCharts', ['$scope', 'getQuotes', function($scope, getQuotes) {
+    getQuotes.then(function(quotes) {
+        console.log(quotes);
+        $scope.quotes = quotes;
+    }).catch(function(err) {
+        console.log(err);
+        $scope.error_message = 'Server error';
+    });
+}]);

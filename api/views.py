@@ -43,7 +43,7 @@ def get_quotes(request):
         interval = 1296000
     time_yesterday = time_now - interval
     today_data = stock_data(time_yesterday, time_now, period, symbol)
-    return render(request, 'api.html', {'data': today_data})
+    return HttpResponse(today_data, content_type='application/json')
 
 def get_current_many(request):
     try:
