@@ -74,7 +74,7 @@ app.controller('tables',  ['$scope', 'allSymbols', function($scope, allSymbols) 
 }]);
 
 app.controller('allCharts', ['$scope', 'getQuotes', function($scope, getQuotes) {
-    getQuotes.then(function(quotes) {
+    getQuotes('EURUSD', 'minute').then(function(quotes) {
         console.log(quotes);
         $scope.quotes = quotes;
     }).catch(function(err) {

@@ -1,13 +1,14 @@
 from django.shortcuts import render
 from django.contrib.auth.decorators import login_required
+from django.http import HttpResponse
+
 import time
 import json
 from api.models import Account, SymbolType, Symbol, Position
 from api.serializing import serialize
 from finam_stock_data import get_data as stock_data
+import urllib.request
 from api.utils import get_current, get_symbol_state
-
-from django.http import HttpResponse
 
 # for all
 def types(request):
@@ -32,17 +33,19 @@ def get_quotes(request):
         return render(request, 'api.html', {'data': 1})
     if not symbol_check:
         return render(request, 'api.html', {'data': 2})
-    time_now = int(time.time())
-    if period == 'min' or period == '5min' or period == '15min':
-        interval = 21600
-    elif period == '30min' or period == 'hour':
-        interval = 43200
-    elif period == 'hour':
-        interval = 86400
-    else:
-        interval = 1296000
-    time_yesterday = time_now - interval
-    today_data = stock_data(time_yesterday, time_now, period, symbol)
+    # time_now = int(time.time())
+    # if period == 'min' or period == '5min' or period == '15min':
+    #     interval = 21600
+    # elif period == '30min' or period == 'hour':
+    #     interval = 43200
+    # elif period == 'hour':
+    #     interval = 86400
+    # else:
+    #     interval = 1296000
+    # time_yesterday = time_now - interval
+    # today_data = stock_data(time_yesterday, time_now, period, symbol)
+    # todo Request to server
+    today_data = urllib.request.urlopen("http://146.185.185.48:49005?symbol=%s&period=%s" % (symbol, period)).read()
     return HttpResponse(today_data, content_type='application/json')
 
 def get_current_many(request):

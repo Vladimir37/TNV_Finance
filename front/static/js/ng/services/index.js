@@ -63,20 +63,22 @@ app.factory('allSymbols', ['$http', function($http) {
 }]);
 
 app.factory('getQuotes', ['$http', function($http) {
-    var params = {
-        symbol: 'GBPUSD',
-        period: 'hour'
-    };
-    var symbols_req = {
-        symbols: JSON.stringify(params)
-    };
-    return $http({
-        url: '/api/get_quotes',
-        method: 'GET',
-        params: symbols_req
-    }).then(function(data) {
-        return data;
-    }).catch(function(err) {
-        return err;
-    });
+    return function(symbol, period) {
+        var params = {
+            symbol: symbol,
+            period: period
+        };
+        var symbols_req = {
+            symbols: JSON.stringify(params)
+        };
+        return $http({
+            url: '/api/get_quotes',
+            method: 'GET',
+            params: symbols_req
+        }).then(function (data) {
+            return data;
+        }).catch(function (err) {
+            return err;
+        });
+    }
 }]);
