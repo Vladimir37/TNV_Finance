@@ -1,262 +1,31 @@
-AmCharts.ready(function() {
-    var chart = AmCharts.makeChart("chartdiv", {
-        "type": "stock",
-        "color": "black",
-        "dataSets": [{
-            "title": "MSFT",
-            "fieldMappings": [{
-                "fromField": "Open",
-                "toField": "open"
-            }, {
-                "fromField": "High",
-                "toField": "high"
-            }, {
-                "fromField": "Low",
-                "toField": "low"
-            }, {
-                "fromField": "Close",
-                "toField": "close"
-            }, {
-                "fromField": "Volume",
-                "toField": "volume"
-            }],
-            "compared": false,
-            "categoryField": "Date",
-
-            /**
-             * data loader for data set data
-             */
-            "dataLoader": {
-                "url": "/static/other/MSFT.csv",
-                "format": "csv",
-                "showCurtain": true,
-                "showErrors": true,
-                "async": true,
-                "reverse": true,
-                "delimiter": ",",
-                "useColumnNames": true
-            },
-
-            /**
-             * data loader for events data
-             */
-            "eventDataLoader": {
-                "url": "/static/other/MSFT_events.csv",
-                "format": "csv",
-                "showCurtain": true,
-                "showErrors": true,
-                "async": true,
-                "reverse": true,
-                "delimiter": ",",
-                "useColumnNames": true,
-                "postProcess": function (data) {
-                    for (var x in data) {
-                        switch (data[x].Type) {
-                            case 'A':
-                                var color = "#85CDE6";
-                                break;
-                            default:
-                                var color = "#cccccc";
-                                break;
-                        }
-                        data[x].Description = data[x].Description.replace("Upgrade", "<strong style=\"color: #0c0\">Upgrade</strong>").replace("Downgrade", "<strong style=\"color: #c00\">Downgrade</strong>");
-                        data[x] = {
-                            type: "pin",
-                            graph: "g1",
-                            backgroundColor: color,
-                            date: data[x].Date,
-                            text: data[x].Type,
-                            description: "<strong>" + data[x].Title + "</strong><br />" + data[x].Description
-                        };
-                    }
-                    return data;
-                }
-            }
-
-        }, {
-            "title": "TXN",
-            "fieldMappings": [{
-                "fromField": "Open",
-                "toField": "open"
-            }, {
-                "fromField": "High",
-                "toField": "high"
-            }, {
-                "fromField": "Low",
-                "toField": "low"
-            }, {
-                "fromField": "Close",
-                "toField": "close"
-            }, {
-                "fromField": "Volume",
-                "toField": "volume"
-            }],
-            "compared": true,
-            "categoryField": "Date",
-            "dataLoader": {
-                "url": "/static/other/TXN.csv",
-                "format": "csv",
-                "showCurtain": true,
-                "showErrors": true,
-                "async": true,
-                "reverse": true,
-                "delimiter": ",",
-                "useColumnNames": true
-            }
-        }],
-        "dataDateFormat": "YYYY-MM-DD",
-
-        "panels": [{
-            "title": "Value",
-            "percentHeight": 80,
-
-            "stockGraphs": [{
-                "type": "candlestick",
-                "id": "g1",
-                "openField": "open",
-                "closeField": "close",
-                "highField": "high",
-                "lowField": "low",
-                "valueField": "close",
-                "lineColor": "#00DD00",
-                "fillColors": "white",
-                "negativeLineColor": "#db4c3c",
-                "negativeFillColors": "#db4c3c",
-                "fillAlphas": 1,
-                "comparedGraphLineThickness": 2,
-                "columnWidth": 0.7,
-                "useDataSetColors": false,
-                "comparable": true,
-                "compareField": "close",
-                "showBalloon": false,
-                "proCandlesticks": true
-            }],
-
-            "stockLegend": {
-                "valueTextRegular": undefined,
-                "periodValueTextComparing": "[[percents.value.close]]%"
-            }
-
+function generate_chart(quotes) {
+    var chart = new CanvasJS.Chart( 'chartdiv', {
+        title: {
+            text: "Tata Motors Stock Prices Sep - 2014"
         },
-
-            {
-                "title": "Volume",
-                "percentHeight": 20,
-                "marginTop": 1,
-                "columnWidth": 0.6,
-                "showCategoryAxis": false,
-
-                "stockGraphs": [{
-                    "valueField": "volume",
-                    "openField": "open",
-                    "type": "column",
-                    "showBalloon": false,
-                    "fillAlphas": 1,
-                    "lineColor": "black",
-                    "fillColors": "black",
-                    "negativeLineColor": "#db4c3c",
-                    "negativeFillColors": "#db4c3c",
-                    "useDataSetColors": false
-                }],
-
-                "stockLegend": {
-                    "markerType": "none",
-                    "markerSize": 0,
-                    "labelText": "",
-                    "periodValueTextRegular": "[[value.close]]"
-                },
-
-                "valueAxes": [{
-                    "usePrefixes": true
-                }]
-            }
-        ],
-
-        "panelsSettings": {
-            "color": "black",
-            "plotAreaFillColors": "#333",
-            "plotAreaFillAlphas": 1,
-            "marginLeft": 60,
-            "marginTop": 5,
-            "marginBottom": 5
+        zoomEnabled: true,
+        axisY: {
+            includeZero: false,
+            title: "Price (INR)"
         },
-
-        "chartScrollbarSettings": {
-            "graph": "g1",
-            "graphType": "line",
-            "usePeriod": "WW",
-            "backgroundColor": "#333",
-            "graphFillColor": "#666",
-            "graphFillAlpha": 0.5,
-            "gridColor": "#555",
-            "gridAlpha": 1,
-            "selectedBackgroundColor": "#444",
-            "selectedGraphFillAlpha": 1
+        axisX: {
+            intervalType: "hour",
+            interval: 1,
+          valueFormatString: "DD hh:mm"
         },
-
-        "categoryAxesSettings": {
-            "equalSpacing": true,
-            "gridColor": "#555",
-            "gridAlpha": 1
+        toolTip: {
+        content: "{x} Sep 2014 <br/> <strong>Prices (INR):</strong> <br/>Open: {y[0]}, Close: {y[3]} <br/> Low: {y[2]}, High: {y[1]}"
         },
-
-        "valueAxesSettings": {
-            "gridColor": "#555",
-            "gridAlpha": 1,
-            "inside": false,
-            "showLastLabel": true
-        },
-
-        "chartCursorSettings": {
-            "pan": true,
-            "valueLineEnabled": true,
-            "valueLineBalloonEnabled": true
-        },
-
-        "legendSettings": {
-            "color": "black"
-        },
-
-        "stockEventsSettings": {
-            "showAt": "high",
-            "type": "pin"
-        },
-
-        "balloon": {
-            "textAlign": "left",
-            "offsetY": 10
-        },
-
-        "periodSelector": {
-            "position": "bottom",
-            "periods": [{
-                "period": "DD",
-                "count": 10,
-                "label": "10D"
-            }, {
-                "period": "MM",
-                "count": 1,
-                "label": "1M"
-            }, {
-                "period": "MM",
-                "count": 6,
-                "label": "6M"
-            }, {
-                "period": "YYYY",
-                "count": 1,
-                "label": "1Y"
-            }, {
-                "period": "YYYY",
-                "count": 2,
-                "selected": true,
-                "label": "2Y"
-            }, /* {
-             "period": "YTD",
-             "label": "YTD"
-             },*/ {
-                "period": "MAX",
-                "label": "MAX"
-            }]
+        data: [
+        {
+            type: "candlestick",
+            dataPoints: [
+                {x:new Date(2014,8,1,20), y:[526.00, 529.45, 517.10, 519.85]},
+                {x:new Date(2014,8,1,21), y:[518.00, 520.50, 512.00, 516.40]},
+                {x:new Date(2014,8,1,22), y:[526.00, 530.50, 521.35, 522.65]},
+                {x:new Date(2014,8,1,23), y:[522.65, 522.65, 509.00, 512.85]}]
         }
+        ]
     });
-});
+    chart.render();
+}

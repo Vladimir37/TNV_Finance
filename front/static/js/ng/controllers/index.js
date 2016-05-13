@@ -74,8 +74,13 @@ app.controller('tables',  ['$scope', 'allSymbols', function($scope, allSymbols) 
 }]);
 
 app.controller('allCharts', ['$scope', 'getQuotes', function($scope, getQuotes) {
-    getQuotes('EURUSD', 'minute').then(function(quotes) {
-        console.log(quotes);
+    getQuotes('EURUSD', 'hours').then(function(quotes) {
+        quotes.data.body = quotes.data.body.map(function(item) {
+            item.date = new Date(item.date);
+            return item;
+        });
+        generate_chart(quotes.data.body);
+        console.log(quotes.data.body.length);
         $scope.quotes = quotes;
     }).catch(function(err) {
         console.log(err);

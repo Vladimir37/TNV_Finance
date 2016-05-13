@@ -30,21 +30,9 @@ def get_quotes(request):
     try:
         period_types.index(period)
     except:
-        return render(request, 'api.html', {'data': 1})
+        return HttpResponse(1, content_type='application/json')
     if not symbol_check:
-        return render(request, 'api.html', {'data': 2})
-    # time_now = int(time.time())
-    # if period == 'min' or period == '5min' or period == '15min':
-    #     interval = 21600
-    # elif period == '30min' or period == 'hour':
-    #     interval = 43200
-    # elif period == 'hour':
-    #     interval = 86400
-    # else:
-    #     interval = 1296000
-    # time_yesterday = time_now - interval
-    # today_data = stock_data(time_yesterday, time_now, period, symbol)
-    # todo Request to server
+        return HttpResponse(2, content_type='application/json')
     today_data = urllib.request.urlopen("http://146.185.185.48:49005?symbol=%s&period=%s" % (symbol, period)).read()
     return HttpResponse(today_data, content_type='application/json')
 
