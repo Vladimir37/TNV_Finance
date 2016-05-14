@@ -75,7 +75,9 @@ app.factory('getQuotes', ['$http', function($http) {
         }).then(function (data) {
             var values = data.data.body.map(function(item) {
                 var target_date = new Date(item.date);
-                target_date.setMinutes(0);
+                if(period != 'min' && period != 'min15' && period != 'min30') {
+                    target_date.setMinutes(0);
+                }
                 target_date.setSeconds(0);
                 item.full_date = target_date.toJSON().slice(0, 10);
                 item.x = target_date;

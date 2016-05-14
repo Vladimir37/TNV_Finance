@@ -105,8 +105,7 @@ app.controller('allCharts', ['$scope', 'getQuotes', 'allSymbols', function($scop
     };
     $scope.create_chart = function() {
         getQuotes($scope.symbol.code, $scope.period).then(function(quotes) {
-            console.log(quotes);
-            generate_chart(quotes, $scope.symbol.name + ' (' + $scope.period + ')');
+            generate_chart(quotes, $scope.symbol.name + ' (' + $scope.period + ')', $scope.period);
             $scope.quotes = quotes;
         }).catch(function (err) {
             console.log(err);
