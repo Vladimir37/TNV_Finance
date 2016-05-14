@@ -68,13 +68,10 @@ app.factory('getQuotes', ['$http', function($http) {
             symbol: symbol,
             period: period
         };
-        var symbols_req = {
-            symbols: JSON.stringify(params)
-        };
         return $http({
             url: '/api/get_quotes',
             method: 'GET',
-            params: symbols_req
+            params: params
         }).then(function (data) {
             var values = data.data.body.map(function(item) {
                 var target_date = new Date(item.date);

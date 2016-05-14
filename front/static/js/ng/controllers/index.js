@@ -97,13 +97,16 @@ app.controller('allCharts', ['$scope', 'getQuotes', 'allSymbols', function($scop
     };
     $scope.change_period = function(period) {
         $scope.period = period;
+        $scope.create_chart();
     };
     $scope.change_symbol = function(symbol) {
         $scope.symbol = symbol;
+        $scope.create_chart();
     };
     $scope.create_chart = function() {
-        getQuotes($scope.symbol.symbol, $scope.period).then(function(quotes) {
-            generate_chart(quotes, 'EUR/USD');
+        getQuotes($scope.symbol.code, $scope.period).then(function(quotes) {
+            console.log(quotes);
+            generate_chart(quotes, $scope.symbol.name + ' (' + $scope.period + ')');
             $scope.quotes = quotes;
         }).catch(function (err) {
             console.log(err);
@@ -113,7 +116,6 @@ app.controller('allCharts', ['$scope', 'getQuotes', 'allSymbols', function($scop
     // start
     allSymbols.then(function(symbols) {
         $scope.symbol_types = symbols;
-        console.log($scope.symbol_types);
     }).catch(function(err) {
         console.log(err);
         $scope.error_message = 'Server error';

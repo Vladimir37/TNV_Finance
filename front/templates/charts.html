@@ -4,12 +4,12 @@
     <section class="all_charts" ng-controller="allCharts">
         <div id="chartdiv"></div>
         <article class="btn-group btn-group-justified">
-            <a ng-class="get_class_period('1min')" ng-click="change_period('1min')" href="#">1 minute</a>
-            <a ng-class="get_class_period('5min')" ng-click="change_period('5min')" href="#">5 minutes</a>
-            <a ng-class="get_class_period('15min')" ng-click="change_period('15min')" href="#">15 minutes</a>
-            <a ng-class="get_class_period('30min')" ng-click="change_period('30min')" href="#">30 minutes</a>
-            <a ng-class="get_class_period('hour')" ng-click="change_period('hour')" href="#">Hours</a>
-            <a ng-class="get_class_period('daily')" ng-click="change_period('daily')" href="#">Days</a>
+            <a ng-class="get_class_period('min')" ng-click="change_period('1min')">1 minute</a>
+            <a ng-class="get_class_period('min5')" ng-click="change_period('min5')">5 minutes</a>
+            <a ng-class="get_class_period('min15')" ng-click="change_period('min15')">15 minutes</a>
+            <a ng-class="get_class_period('min30')" ng-click="change_period('min30')">30 minutes</a>
+            <a ng-class="get_class_period('hour')" ng-click="change_period('hour')">Hours</a>
+            <a ng-class="get_class_period('day')" ng-click="change_period('day')">Days</a>
         </article>
         <article class="table_types" ng-repeat="(type, symbols) in symbol_types">
             <h3>{[ type ]}</h3>

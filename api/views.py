@@ -26,7 +26,7 @@ def get_quotes(request):
     symbol = request.GET.get('symbol', 'EURUSD')
     period = request.GET.get('period', 'hour')
     symbol_check = Symbol.objects.filter(code=symbol).exists()
-    period_types = ['min', '5min', '15min', '30min', 'hour', 'daily']
+    period_types = ['min', 'min5', 'min15', 'min30', 'hour', 'day']
     try:
         period_types.index(period)
     except:
