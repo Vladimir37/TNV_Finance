@@ -39,9 +39,17 @@
     padding: 2px;
     border: 1px solid #000000;
 }
+.index_symbol .name {
+    cursor: pointer;
+}
 .small_form {
     width: 400px;
     margin: auto;
+}
+
+.primary-symbol {
+    background: #008cba;
+    color: #ffffff;
 }
 
 /* helpers*/
@@ -63,28 +71,4 @@ a[href='http://canvasjs.com/'] {
   height  : 455px;
   position: relative;
   color: #000000;
-}
-#chartdiv .amChartsPeriodSelector {
-  padding-left: 35px;
-}
-.amChartsButtonSelected {
-  font-weight: bold;
-}
-.amChartsButton {
-  color: #000000;
-  background: transparent;
-  opacity: 0.7;
-  border: 1px solid rgba(255,255,2555,.3);
-  -moz-border-radius: 5px;
-  border-radius: 5px;
-  margin: 1px;
-  outline: none;
-  box-sizing: border-box;
-}
-.amChartsInputField {
-  color: #000;
-}
-.demo-flipper-front {
-  border: 1px solid #000;
-  background: #000;
 }

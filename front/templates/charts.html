@@ -1,6 +1,25 @@
 {% extends "_layout_.html" %}
 
 {% block content %}
-    <section class="all_charts" ng-controller="allCharts"></section>
-    <div id="chartdiv"></div>
+    <section class="all_charts" ng-controller="allCharts">
+        <div id="chartdiv"></div>
+        <article class="btn-group btn-group-justified">
+            <a ng-class="get_class_period('1min')" ng-click="change_period('1min')" href="#">1 minute</a>
+            <a ng-class="get_class_period('5min')" ng-click="change_period('5min')" href="#">5 minutes</a>
+            <a ng-class="get_class_period('15min')" ng-click="change_period('15min')" href="#">15 minutes</a>
+            <a ng-class="get_class_period('30min')" ng-click="change_period('30min')" href="#">30 minutes</a>
+            <a ng-class="get_class_period('hour')" ng-click="change_period('hour')" href="#">Hours</a>
+            <a ng-class="get_class_period('daily')" ng-click="change_period('daily')" href="#">Days</a>
+        </article>
+        <article class="table_types" ng-repeat="(type, symbols) in symbol_types">
+            <h3>{[ type ]}</h3>
+            <article class="row">
+                <article class="index_symbol col-md-3" ng-repeat="symbol in symbols">
+                    <article class="name" ng-class="get_class_symbol(symbol.code)" ng-click="change_symbol({name: symbol.name, code: symbol.code})">{[ symbol.name ]}</article>
+                    <article class="value {[ symbol.color ]}">{[ symbol.price ]}</article>
+                    <img class="arrow" ng-src="{[ '/static/imgs/staff/' + symbol.arrow ]}" alt="arrow"/>
+                </article>
+            </article>
+        </article>
+    </section>
 {% endblock %}

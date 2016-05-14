@@ -76,7 +76,20 @@ app.factory('getQuotes', ['$http', function($http) {
             method: 'GET',
             params: symbols_req
         }).then(function (data) {
-            return data;
+            var values = data.data.body.map(function(item) {
+                var target_date = new Date(item.date);
+                target_date.setMinutes(0);
+                target_date.setSeconds(0);
+                item.full_date = target_date.toJSON().slice(0, 10);
+                item.x = target_date;
+                item.y = [];
+                item.y.push(item.open);
+                item.y.push(item.max);
+                item.y.push(item.min);
+                item.y.push(item.close);
+                return item;
+            });
+            return values;
         }).catch(function (err) {
             return err;
         });

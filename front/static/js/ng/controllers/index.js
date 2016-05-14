@@ -73,17 +73,50 @@ app.controller('tables',  ['$scope', 'allSymbols', function($scope, allSymbols) 
     });
 }]);
 
-app.controller('allCharts', ['$scope', 'getQuotes', function($scope, getQuotes) {
-    getQuotes('EURUSD', 'hours').then(function(quotes) {
-        quotes.data.body = quotes.data.body.map(function(item) {
-            item.date = new Date(item.date);
-            return item;
+app.controller('allCharts', ['$scope', 'getQuotes', 'allSymbols', function($scope, getQuotes, allSymbols) {
+    $scope.period = 'hour';
+    $scope.symbol = {
+        name: 'EUR/USD',
+        code: 'EURUSD'
+    };
+    $scope.get_class_period = function(period) {
+        if($scope.period == period) {
+            return 'btn btn-primary';
+        }
+        else {
+            return 'btn btn-default';
+        }
+    };
+    $scope.get_class_symbol = function(symbol) {
+        if($scope.symbol.code == symbol) {
+            return 'primary-symbol';
+        }
+        else {
+            return '';
+        }
+    };
+    $scope.change_period = function(period) {
+        $scope.period = period;
+    };
+    $scope.change_symbol = function(symbol) {
+        $scope.symbol = symbol;
+    };
+    $scope.create_chart = function() {
+        getQuotes($scope.symbol.symbol, $scope.period).then(function(quotes) {
+            generate_chart(quotes, 'EUR/USD');
+            $scope.quotes = quotes;
+        }).catch(function (err) {
+            console.log(err);
+            $scope.error_message = 'Server error';
         });
-        generate_chart(quotes.data.body);
-        console.log(quotes.data.body.length);
-        $scope.quotes = quotes;
+    };
+    // start
+    allSymbols.then(function(symbols) {
+        $scope.symbol_types = symbols;
+        console.log($scope.symbol_types);
     }).catch(function(err) {
         console.log(err);
         $scope.error_message = 'Server error';
     });
+    $scope.create_chart();
 }]);
