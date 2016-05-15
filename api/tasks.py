@@ -1,4 +1,4 @@
-from api.models import Account, SymbolType, Symbol, Position
+from api.models import Symbol, Position
 from api.utils import close_position, get_current, margin_call_check
 from celery import Celery
 

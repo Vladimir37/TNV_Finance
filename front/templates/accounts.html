@@ -5,9 +5,25 @@
         <h3>Account creating</h3>
     </article>
     <article class="modal-body" ng-controller="creatingAccount">
-        <select class="form-control">
-            <option value="{[ type.pk ]}" ng-repeat="type in types">{[ type.fields.name ]}</option>
-        </select>
+        <form ng-controller="creatingAccount" ng-submit="submit()">
+            <h4>Symbols</h4>
+            <select class="form-control" ng-model="userdata.category">
+                <option value="{[ type.pk ]}" ng-repeat="type in types">{[ type.fields.name ]}</option>
+            </select>
+            <h4>Leverage</h4>
+            <select class="form-control" ng-model="userdata.leverage">
+                <option>1</option>
+                <option>5</option>
+                <option>10</option>
+                <option>20</option>
+                <option>50</option>
+                <option>100</option>
+                <option>200</option>
+            </select>
+            <h4>Value (USD)</h4>
+            <input type="text" class="form-control" placeholder="5000" ng-model="userdata.value"/><br/>
+            <button class="btn btn-primary">Create</button>
+        </form>
     </article>
 {% endblock %}
 

@@ -122,11 +122,36 @@ app.controller('allCharts', ['$scope', 'getQuotes', 'allSymbols', function($scop
     $scope.create_chart();
 }]);
 
-app.controller('creatingAccount', ['$scope', 'getCategories', function($scope, getCategories) {
+app.controller('creatingAccount', ['$scope', '$http', 'getCategories', function($scope, $http, getCategories) {
+    $scope.userdata = {};
+    $scope.error_message = null;
+    $scope.submit = function() {
+        $http({
+            method: 'POST',
+            url: '/api/add_account',
+            headers: {'Content-Type': 'application/x-www-form-urlencoded'},
+            data: $.param($scope.userdata)
+        }).then(function(res) {
+            if(res.data == 0) {
+                window.location.pathname = '/cabinet';
+            }
+            else {
+                $scope.error_message = 'Incorrect data!';
+            }
+        }).catch(function(err) {
+            console.log(err);
+            $scope.error_message = 'Server error';
+        });
+    };
+    // start
     getCategories.then(function(types) {
         $scope.types = types.data;
     }).catch(function(err) {
         console.log(err);
         $scope.error_message = 'Server error';
     });
+}]);
+
+app.controller('listAccounts', ['$scope', '$http', 'getAccounts', function($scope, $http, getAccounts) {
+    getAccounts()
 }]);

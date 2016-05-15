@@ -2,7 +2,7 @@ from django.contrib.auth.models import User
 from django.views.decorators.http import require_http_methods
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import render
-from django.http import HttpResponseRedirect
+from django.http import HttpResponseRedirect, HttpResponse
 from django.contrib import auth
 from api.models import Account, SymbolType, Symbol, Position
 from googlefinance import getQuotes
@@ -77,13 +77,13 @@ def add_account(request):
         available_leverages.index(leverage)
         symbol_type = SymbolType.objects.get(pk=category)
     except:
-        return render(request, 'api.html', {'data': 1})
+        return HttpResponse(1, content_type='application/json')
     if value > 0:
         current_user = request.user
         Account.objects.create(user=current_user, category=symbol_type, value=value, leverage=leverage)
-        return render(request, 'api.html', {'data': 0})
+        return HttpResponse(0, content_type='application/json')
     else:
-        return render(request, 'api.html', {'data': 1})
+        return HttpResponse(1, content_type='application/json')
 
 @require_http_methods(['POST'])
 @login_required()
