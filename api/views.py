@@ -2,18 +2,16 @@ from django.shortcuts import render
 from django.contrib.auth.decorators import login_required
 from django.http import HttpResponse
 
-import time
 import json
 from api.models import Account, SymbolType, Symbol, Position
 from api.serializing import serialize
-from finam_stock_data import get_data as stock_data
 import urllib.request
 from api.utils import get_current, get_symbol_state
 
 # for all
 def types(request):
     types = SymbolType.objects.all()
-    return render(request, 'api.html', serialize(types))
+    return HttpResponse(serialize(types), content_type='application/json')
 
 def all_symbols(request):
     types = SymbolType.objects.all()

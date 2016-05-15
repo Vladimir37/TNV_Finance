@@ -1,0 +1,31 @@
+{% extends "_layout_.html" %}
+
+{% block modal %}
+    <article class="modal-header">
+        <h3>Account creating</h3>
+    </article>
+    <article class="modal-body" ng-controller="creatingAccount">
+        <select class="form-control">
+            <option value="{[ type.pk ]}" ng-repeat="type in types">{[ type.fields.name ]}</option>
+        </select>
+    </article>
+{% endblock %}
+
+{% block content %}
+    <section class="row">
+        <article class="col-md-4">
+            <div class="panel panel-primary">
+                <div class="panel-heading">
+                    <h3 class="panel-title">Your accounts</h3>
+                </div>
+                <div class="panel-body" ng-controller="creatingAccount">
+{#                    <article class="list-group-item" ng-repeat="account in accounts">#}
+{#                        //#}
+{#                    </article>#}
+                    <article class="btn btn-primary" data-toggle="modal" data-target="#modal">New</article>
+                </div>
+            </div>
+        </article>
+        <article class="col-md-8">Test</article>
+    </section>
+{% endblock %}

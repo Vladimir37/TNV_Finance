@@ -121,3 +121,12 @@ app.controller('allCharts', ['$scope', 'getQuotes', 'allSymbols', function($scop
     });
     $scope.create_chart();
 }]);
+
+app.controller('creatingAccount', ['$scope', 'getCategories', function($scope, getCategories) {
+    getCategories.then(function(types) {
+        $scope.types = types.data;
+    }).catch(function(err) {
+        console.log(err);
+        $scope.error_message = 'Server error';
+    });
+}]);

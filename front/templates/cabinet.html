@@ -1,2 +1,11 @@
 {% extends "_layout_.html" %}
-{% block content %} New text {% endblock %}
+
+{% block content %}
+    <h2>Welcome, {{ user.get_username }}!</h2>
+    <ul class="nav nav-pills nav-stacked">
+        <li class="active"><a>Cabinet</a></li>
+        <li><a href="/positions">Positions</a></li>
+        <li><a href="/accounts">Accounts</a></li>
+        <li><a href="/events">Events</a></li>
+    </ul>
+{% endblock %}

@@ -94,3 +94,31 @@ app.factory('getQuotes', ['$http', function($http) {
         });
     }
 }]);
+
+app.factory('getCategories', ['$http', function($http) {
+    return $http({
+        url: '/api/types',
+        method: 'GET'
+    }).then(function(data) {
+        return data;
+    }).catch(function(err) {
+        return err;
+    });
+}]);
+
+app.factory('getAccounts', ['$http', function($http) {
+    return function (active) {
+        var params = {
+            active: active
+        };
+        return $http({
+            url: '/api/get_accounts',
+            method: 'GET',
+            params: params
+        }).then(function(data) {
+            return data;
+        }).catch(function(err) {
+            return err;
+        });
+    }
+}]);
