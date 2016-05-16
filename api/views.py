@@ -6,7 +6,7 @@ import json
 from api.models import Account, SymbolType, Symbol, Position
 from api.serializing import serialize
 import urllib.request
-from api.utils import get_current, get_symbol_state
+from api.utils import get_current, get_symbol_state, get_position_value
 
 # for all
 def types(request):
@@ -57,11 +57,15 @@ def get_accounts(request):
     accounts_raw = Account.objects.filter(user=username, active=active)
     accounts = []
     for account in accounts_raw:
+        positions = Position.objects.filter(owner=account)
+        total_value = 0
+        for position in positions:
+            total_value += get_position_value(position)
         current_account = {
             'id': account.pk,
             'category': account.category.name,
-            'positions': Position.objects.filter(owner=account).count(),
-            'value': account.value
+            'positions': positions.count(),
+            'value': account.value + total_value
         }
         accounts.append(current_account)
     return HttpResponse(json.dumps(accounts), content_type='application/json')
@@ -73,7 +77,28 @@ def get_positions(request):
     try:
         account_num = int(request.GET.get('account', 0))
         target_account = Account.objects.get(pk=account_num, user=username)
-        positions = Position.objects.filter(owner=target_account, active=active)
-        return render(request, 'api.html', serialize(positions))
+        positions_raw = Position.objects.filter(owner=target_account, active=active)
+        positions = []
+        for position in positions_raw:
+            end_date = position.end_date
+            if end_date:
+                end_date = position.end_date.isoformat()
+            current_position = {
+                'id': position.pk,
+                'active': position.active,
+                'symbol': position.symbol.code,
+                'start_date': position.start_date.isoformat(),
+                'start_price': position.start_price,
+                'buy': position.buy,
+                'value': position.value,
+                'end_date': end_date,
+                'end_price': position.end_price,
+                'profit': position.profit or get_position_value(position),
+                'sl': position.sl,
+                'tp': position.tp,
+                'closing_way': position.closing_way
+            }
+            positions.append(current_position)
+        return HttpResponse(json.dumps(positions), content_type='application/json')
     except:
         return HttpResponse(json.dumps(1), content_type='application/json')

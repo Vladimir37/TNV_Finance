@@ -205,3 +205,13 @@ def get_symbol_state(code):
     current_date = datetime.now()
     code_hash = hash(code + str(current_date.year) + str(current_date.day) + str(current_date.hour))
     return code_hash % 2 == 0
+
+def get_position_value(position):
+    symbol_code = position.symbol.code
+    end_price = get_current(symbol_code)
+    if position.buy:
+        raw_profit = (end_price * position.value) - (position.start_price * position.value)
+    else:
+        raw_profit = (position.start_price * position.value) - (end_price * position.value)
+    profit = float('%.2f' % raw_profit)
+    return profit
