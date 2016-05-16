@@ -53,7 +53,10 @@ def get_current_many(request):
 @login_required()
 def get_accounts(request):
     username = request.user
-    active = bool(request.GET.get('active', 0))
+    try:
+        active = bool(int(request.GET.get('active', 0)))
+    except:
+        return HttpResponse(json.dumps(1), content_type='application/json')
     accounts_raw = Account.objects.filter(user=username, active=active)
     accounts = []
     for account in accounts_raw:
@@ -64,8 +67,13 @@ def get_accounts(request):
         current_account = {
             'id': account.pk,
             'category': account.category.name,
-            'positions': positions.count(),
-            'value': account.value + total_value
+            'open_positions': positions.count(),
+            'closed_positions': Position.objects.filter(owner=account, active=False).count(),
+            'initial_value': account.initial_value,
+            'current_value': account.value,
+            'calculated_value': account.value + total_value,
+            'profit': account.profit,
+            'active': int(account.active)
         }
         accounts.append(current_account)
     return HttpResponse(json.dumps(accounts), content_type='application/json')

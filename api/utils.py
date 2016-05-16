@@ -80,7 +80,7 @@ def add_account(request):
         return HttpResponse(1, content_type='application/json')
     if value > 0:
         current_user = request.user
-        Account.objects.create(user=current_user, category=symbol_type, value=value, leverage=leverage)
+        Account.objects.create(user=current_user, category=symbol_type, value=value, initial_value=value, leverage=leverage)
         return HttpResponse(0, content_type='application/json')
     else:
         return HttpResponse(1, content_type='application/json')
@@ -193,6 +193,7 @@ def close_position(position, type):
     position.profit = profit
     position.closing_way = type
     account.value += profit
+    account.profit += profit
     try:
         position.save()
         account.save()

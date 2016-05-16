@@ -154,10 +154,28 @@ app.controller('creatingAccount', ['$scope', '$http', 'getCategories', function(
 
 app.controller('listAccounts', ['$scope', 'getAccounts', function($scope, getAccounts) {
     $scope.active = 1;
+    $scope.active_acc = null;
     $scope.change_active = function(active) {
         $scope.active = active;
+        $scope.loading();
     };
-    $scope.get_class = function(active) {
+    $scope.change_acc = function(acc) {
+        for(var account in $scope.accounts) {
+            if($scope.accounts[account].id == acc) {
+                $scope.active_acc = $scope.accounts[account];
+                break;
+            }
+        }
+    };
+    $scope.check_active = function(acc) {
+        if(acc.active) {
+            return 'Active';
+        }
+        else {
+            return 'Inactive';
+        }
+    };
+    $scope.get_class_activity = function(active) {
         if($scope.active == active) {
             return 'active';
         }
@@ -165,12 +183,25 @@ app.controller('listAccounts', ['$scope', 'getAccounts', function($scope, getAcc
             return '';
         }
     };
+    $scope.get_class_acc = function(acc) {
+        if($scope.active_acc.id == acc) {
+            return 'active';
+        }
+        else {
+            return '';
+        }
+    };
+    $scope.loading = function() {
+        getAccounts($scope.active).then(function (accounts) {
+            $scope.accounts = accounts.data;
+            if(accounts.data.length) {
+                $scope.active_acc = accounts.data[0];
+            }
+        }).catch(function (err) {
+            console.log(err);
+            $scope.error_message = 'Server error';
+        });
+    };
     // start
-    getAccounts($scope.active).then(function(accounts) {
-        console.log(accounts);
-        $scope.accounts = accounts.data;
-    }).catch(function(err) {
-        console.log(err);
-        $scope.error_message = 'Server error';
-    });
+    $scope.loading();
 }]);

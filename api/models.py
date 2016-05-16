@@ -11,8 +11,10 @@ class SymbolType(models.Model):
 class Account(models.Model):
     user = models.ForeignKey(User)
     category = models.ForeignKey(SymbolType)
+    initial_value = models.FloatField()
     value = models.FloatField()
     leverage = models.IntegerField()
+    profit = models.FloatField(default=0)
     active = models.BooleanField(default=True)
 
 class Symbol(models.Model):

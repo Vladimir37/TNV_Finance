@@ -57,7 +57,32 @@
     text-align: center;
     display: inline-block;
 }
-
+.main-list-group {
+    margin-bottom: 10px;
+}
+.main-list {
+    text-align: left;
+    cursor: pointer;
+}
+.cabinet-panel {
+    width: 500px;
+    margin: auto;
+}
+.cabinet-panel .list-group-item{
+    padding: 0;
+}
+.cabinet-table th {
+    text-align: center;
+    background: #dddfe0;
+    width: 50%;
+}
+.cabinet-table tr td:first-child {
+    font-weight: bold;
+    text-align: left;
+}
+.cabinet-table tr td:last-child {
+    text-align: right;
+}
 
 /* helpers*/
 .red {
