@@ -54,8 +54,17 @@ def get_current_many(request):
 def get_accounts(request):
     username = request.user
     active = bool(request.GET.get('active', 0))
-    accounts = Account.objects.filter(user=username, active=active)
-    return render(request, 'api.html', serialize(accounts))
+    accounts_raw = Account.objects.filter(user=username, active=active)
+    accounts = []
+    for account in accounts_raw:
+        current_account = {
+            'id': account.pk,
+            'category': account.category.name,
+            'positions': Position.objects.filter(owner=account).count(),
+            'value': account.value
+        }
+        accounts.append(current_account)
+    return HttpResponse(json.dumps(accounts), content_type='application/json')
 
 @login_required()
 def get_positions(request):

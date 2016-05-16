@@ -102,7 +102,7 @@ def delete_account(request):
 def create_position(request):
     current_user = request.user
     account_num = request.POST.get('account', 0)
-    symbol_num = request.POST.get('symbol', 'Incorrect')
+    symbol_code = request.POST.get('symbol', 'Incorrect')
     value = request.POST.get('value', 1)
     start_date = datetime.now()
     take_profit = request.POST.get('take_profit', None)
@@ -111,8 +111,8 @@ def create_position(request):
     if request.POST.get('type', 'Incorrect') == 'buy':
         type_is_buy = True
     try:
-        target_symbol = Symbol.objects.get(code=symbol_num)
-        start_price = get_current(symbol_num)
+        target_symbol = Symbol.objects.get(code=symbol_code)
+        start_price = get_current(symbol_code)
         account = Account.objects.get(pk=account_num, user=current_user, active=True)
         value = int(value)
         if value < 0 or value > account.leverage * account.value:

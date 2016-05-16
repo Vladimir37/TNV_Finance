@@ -51,6 +51,13 @@
     background: #008cba;
     color: #ffffff;
 }
+.activity {
+    margin-top: 10px;
+    cursor: pointer;
+    text-align: center;
+    display: inline-block;
+}
+
 
 /* helpers*/
 .red {

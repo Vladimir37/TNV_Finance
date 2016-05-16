@@ -34,11 +34,16 @@
                 <div class="panel-heading">
                     <h3 class="panel-title">Your accounts</h3>
                 </div>
-                <div class="panel-body" ng-controller="creatingAccount">
+                <div class="panel-body" ng-controller="listAccounts">
 {#                    <article class="list-group-item" ng-repeat="account in accounts">#}
 {#                        //#}
 {#                    </article>#}
                     <article class="btn btn-primary" data-toggle="modal" data-target="#modal">New</article>
+                    <br/>
+                    <ul class="nav nav-pills activity">
+                        <li ng-class="get_class(1)" ng-click="change_active(1)"><a>Active</a></li>
+                        <li ng-class="get_class(0)" ng-click="change_active(0)"><a>Inactive</a></li>
+                    </ul>
                 </div>
             </div>
         </article>

@@ -152,6 +152,25 @@ app.controller('creatingAccount', ['$scope', '$http', 'getCategories', function(
     });
 }]);
 
-app.controller('listAccounts', ['$scope', '$http', 'getAccounts', function($scope, $http, getAccounts) {
-    getAccounts()
+app.controller('listAccounts', ['$scope', 'getAccounts', function($scope, getAccounts) {
+    $scope.active = 1;
+    $scope.change_active = function(active) {
+        $scope.active = active;
+    };
+    $scope.get_class = function(active) {
+        if($scope.active == active) {
+            return 'active';
+        }
+        else {
+            return '';
+        }
+    };
+    // start
+    getAccounts($scope.active).then(function(accounts) {
+        console.log(accounts);
+        $scope.accounts = accounts.data;
+    }).catch(function(err) {
+        console.log(err);
+        $scope.error_message = 'Server error';
+    });
 }]);
