@@ -1,4 +1,4 @@
-var app = angular.module('TNVApp', []);
+var app = angular.module('TNVApp', ['highcharts-ng']);
 
 app.config(['$interpolateProvider', function($interpolateProvider) {
   $interpolateProvider.startSymbol('{[');

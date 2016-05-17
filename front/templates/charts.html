@@ -2,7 +2,7 @@
 
 {% block content %}
     <section class="all_charts" ng-controller="allCharts">
-        <div id="chartdiv"></div>
+        <highchart id="chart1" config="chartConfig" class="span10"></highchart>
         <article class="btn-group btn-group-justified">
             <a ng-class="get_class_period('min')" ng-click="change_period('min')">1 minute</a>
             <a ng-class="get_class_period('min5')" ng-click="change_period('min5')">5 minutes</a>
