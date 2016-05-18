@@ -5,44 +5,22 @@
         <h3>Account creating</h3>
     </article>
     <article class="modal-body" ng-controller="creatingAccount">
-        <form ng-controller="creatingAccount" ng-submit="submit()">
-            <h4>Symbols</h4>
-            <article class="alert alert-danger" ng-if="error_message">
-                <b>{[ error_message ]}</b>
-            </article>
-            <select class="form-control" ng-model="userdata.category">
-                <option value="{[ type.pk ]}" ng-repeat="type in types">{[ type.fields.name ]}</option>
-            </select>
-            <h4>Leverage</h4>
-            <select class="form-control" ng-model="userdata.leverage">
-                <option>1</option>
-                <option>5</option>
-                <option>10</option>
-                <option>20</option>
-                <option>50</option>
-                <option>100</option>
-                <option>200</option>
-            </select>
-            <h4>Value (USD)</h4>
-            <input type="text" class="form-control" placeholder="5000" ng-model="userdata.value"/><br/>
-            <button class="btn btn-primary">Create</button>
-        </form>
     </article>
 {% endblock %}
 
 {% block content %}
-    <section class="row" ng-controller="listAccounts">
+    <section class="row" ng-controller="listPositions">
         <article class="col-md-4">
             <div class="panel panel-primary">
                 <div class="panel-heading">
-                    <h3 class="panel-title">Your accounts</h3>
+                    <h3 class="panel-title">Your positions</h3>
                 </div>
                 <div class="panel-body">
                     <article class="main-list-group">
-                        <article class="list-group-item main-list" ng-class="get_class_acc(account.id)" ng-click="change_acc(account.id)" ng-repeat="account in accounts">
-                            {[ account.category ]}
-                            <span class="badge" title="Number of positions">{[ account.open_positions ]}</span>
-                            <span class="badge" title="Current deposit">{[ account.calculated_value ]} USD</span>
+                        <article class="list-group-item main-list" ng-class="get_class_pos(position.id)" ng-click="change_pos(position.id)" ng-repeat="position in positions">
+                            {[ position.symbol ]}
+                            <span class="badge" title="Number of positions">{[ position.open_positions ]}</span>
+                            <span class="badge" title="Current deposit">{[ position.calculated_value ]} USD</span>
                         </article>
                     </article>
                     <article class="btn btn-primary" data-toggle="modal" data-target="#modal">New</article>
@@ -59,7 +37,7 @@
                 <b>{[ error_message ]}</b>
             </article>
             <article class="panel panel-primary" ng-if="active_acc">
-                <article class="panel-heading">{[ active_acc.category ]}</article>
+                <article class="panel-heading">{[ active_pos.symbol]}</article>
                 <article class="panel-body">
                     <table class="table table-striped table-hover cabinet-table">
                         <tr>
@@ -68,43 +46,39 @@
                         </tr>
                         <tr>
                             <td>ID</td>
-                            <td>{[ active_acc.id ]}</td>
+                            <td>{[ active_pos.id ]}</td>
                         </tr>
                         <tr>
                             <td>Category</td>
-                            <td>{[ active_acc.category ]}</td>
-                        </tr>
-                        <tr>
-                            <td>Leverage</td>
-                            <td>{[ '1:' + active_acc.leverage ]}</td>
+                            <td>{[ active_pos.category ]}</td>
                         </tr>
                         <tr>
                             <td>Initial deposit</td>
-                            <td>{[ active_acc.initial_value ]}</td>
+                            <td>{[ active_pos.initial_value ]}</td>
                         </tr>
                         <tr>
                             <td>Current deposit</td>
-                            <td>{[ active_acc.current_value ]}</td>
+                            <td>{[ active_pos.current_value ]}</td>
                         </tr>
                         <tr>
                             <td>Calculated deposit</td>
-                            <td>{[ active_acc.calculated_value ]}</td>
+                            <td>{[ active_pos.calculated_value ]}</td>
                         </tr>
                         <tr>
                             <td>Profit</td>
-                            <td>{[ active_acc.profit ]}</td>
+                            <td>{[ active_pos.profit ]}</td>
                         </tr>
                         <tr>
                             <td>Open positions</td>
-                            <td>{[ active_acc.open_positions ]}</td>
+                            <td>{[ active_pos.open_positions ]}</td>
                         </tr>
                         <tr>
                             <td>Closed positions</td>
-                            <td>{[ active_acc.closed_positions ]}</td>
+                            <td>{[ active_pos.closed_positions ]}</td>
                         </tr>
                         <tr>
                             <td>Status</td>
-                            <td>{[ check_active(active_acc) ]}</td>
+                            <td>{[ check_active(active_pos) ]}</td>
                         </tr>
                     </table>
                     <a class="btn btn-primary" href="/positions#{[ active_acc.id ]}">Details</a>

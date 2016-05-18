@@ -10,8 +10,8 @@ def accounts(request):
     return render(request, 'accounts.html')
 
 @login_required()
-def pass_change(request):
-    return render(request, 'pass_change.html')
+def positions(request):
+    return render(request, 'positions.html')
 
 @login_required()
 def add_account(request):

@@ -244,3 +244,63 @@ app.controller('listAccounts', ['$scope', '$http', 'getAccounts', function($scop
     // start
     $scope.loading();
 }]);
+
+app.controller('listPositions', ['$scope', 'getPositions', function($scope, getPositions) {
+    $scope.active = 1;
+    $scope.active_pos = null;
+    $scope.change_active = function(active) {
+        $scope.active = active;
+        $scope.loading();
+    };
+    $scope.change_pos = function(acc) {
+        for(var position in $scope.positions) {
+            if($scope.positions[position].id == acc) {
+                $scope.active_pos = $scope.positions[position];
+                break;
+            }
+        }
+    };
+    $scope.check_active = function(pos) {
+        if(pos.active) {
+            return 'Active';
+        }
+        else {
+            return 'Inactive';
+        }
+    };
+    $scope.get_class_activity = function(active) {
+        if($scope.active == active) {
+            return 'active';
+        }
+        else {
+            return '';
+        }
+    };
+    $scope.get_class_pos = function(pos) {
+        if($scope.active_pos.id == pos) {
+            return 'active';
+        }
+        else {
+            return '';
+        }
+    };
+    $scope.loading = function() {
+        var account_num = +window.location.hash.slice(1);
+        if (!account_num) {
+            $scope.error_message = 'Incorrect account!';
+        }
+        else {
+            getPositions($scope.active, account_num).then(function (positions) {
+                $scope.positions = positions.data;
+                if (positions.data.length) {
+                    $scope.active_pos = positions.data[0];
+                }
+            }).catch(function (err) {
+                console.log(err);
+                $scope.error_message = 'Server error';
+            });
+        }
+    };
+    // start
+    $scope.loading();
+}]);

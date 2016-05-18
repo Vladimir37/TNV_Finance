@@ -1,6 +1,6 @@
 from django.conf.urls import url
 from django.views.generic import TemplateView
-from front.views import cabinet, pass_change, add_account, delete_account, create_position, close_position, accounts
+from front.views import cabinet, positions, create_position, close_position, accounts
 
 urlpatterns = [
     url(r'^$', TemplateView.as_view(template_name='_layout_.html')),
@@ -8,10 +8,9 @@ urlpatterns = [
     url(r'^login/$', TemplateView.as_view(template_name='login.html'), name='login'),
     url(r'^tables/$', TemplateView.as_view(template_name='tables.html'), name='tables'),
     url(r'^charts/$', TemplateView.as_view(template_name='charts.html'), name='charts'),
-    url(r'^pass_change/$', pass_change, name='pass_change'),
+    url(r'^positions/$', positions, name='positions'),
     url(r'^cabinet/$', cabinet, name='cabinet'),
     url(r'^accounts/$', accounts, name='accounts'),
-    url(r'^delete_account/$', delete_account, name='delete_account'),
     url(r'^create_position/$', create_position, name='create_position'),
     url(r'^close_position/$', close_position, name='close_position')
 ]

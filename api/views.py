@@ -67,6 +67,7 @@ def get_accounts(request):
         current_account = {
             'id': account.pk,
             'category': account.category.name,
+            'leverage': account.leverage,
             'open_positions': positions.count(),
             'closed_positions': Position.objects.filter(owner=account, active=False).count(),
             'initial_value': account.initial_value,
@@ -81,8 +82,8 @@ def get_accounts(request):
 @login_required()
 def get_positions(request):
     username = request.user
-    active = bool(request.GET.get('active', 0))
     try:
+        active = bool(int(request.GET.get('active', 0)))
         account_num = int(request.GET.get('account', 0))
         target_account = Account.objects.get(pk=account_num, user=username)
         positions_raw = Position.objects.filter(owner=target_account, active=active)

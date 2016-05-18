@@ -116,3 +116,21 @@ app.factory('getAccounts', ['$http', function($http) {
         });
     }
 }]);
+
+app.factory('getPositions', ['$http', function($http) {
+    return function (active, account) {
+        var params = {
+            active: active,
+            account: account
+        };
+        return $http({
+            url: '/api/get_positions',
+            method: 'GET',
+            params: params
+        }).then(function(data) {
+            return data;
+        }).catch(function(err) {
+            return err;
+        });
+    }
+}]);
