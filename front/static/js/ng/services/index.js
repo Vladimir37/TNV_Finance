@@ -74,24 +74,12 @@ app.factory('getQuotes', ['$http', function($http) {
             params: params
         }).then(function (data) {
             var values = data.data.body.map(function(item) {
-                //var target_date = new Date(item.date);
-                //if(period != 'min' && period != 'min15' && period != 'min30') {
-                //    target_date.setMinutes(0);
-                //}
-                //target_date.setSeconds(0);
-                //item.full_date = target_date.toJSON().slice(0, 10);
                 var result_arr = [];
                 result_arr.push(item.date);
                 result_arr.push(item.open);
                 result_arr.push(item.max);
                 result_arr.push(item.min);
                 result_arr.push(item.close);
-                //item.x = target_date;
-                //item.y = [];
-                //item.y.push(item.open);
-                //item.y.push(item.max);
-                //item.y.push(item.min);
-                //item.y.push(item.close);
                 return result_arr;
             });
             return values;

@@ -92,6 +92,8 @@ def delete_account(request):
     current_user = request.user
     try:
         target_account = Account.objects.get(pk=account, user=current_user)
+        target_positions = Position.objects.filter(owner=target_account)
+        target_positions.delete()
         target_account.delete()
         return render(request, 'api.html', {'data': 0})
     except:

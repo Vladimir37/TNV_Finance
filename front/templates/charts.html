@@ -2,6 +2,9 @@
 
 {% block content %}
     <section class="all_charts" ng-controller="allCharts">
+        <article class="alert alert-danger" ng-if="error_message">
+                <b>{[ error_message ]}</b>
+        </article>
         <highchart id="chart1" config="chartConfig" class="span10"></highchart>
         <article class="btn-group btn-group-justified">
             <a ng-class="get_class_period('min')" ng-click="change_period('min')">1 minute</a>

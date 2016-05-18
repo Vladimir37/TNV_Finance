@@ -173,7 +173,7 @@ app.controller('creatingAccount', ['$scope', '$http', 'getCategories', function(
     });
 }]);
 
-app.controller('listAccounts', ['$scope', 'getAccounts', function($scope, getAccounts) {
+app.controller('listAccounts', ['$scope', '$http', 'getAccounts', function($scope, $http, getAccounts) {
     $scope.active = 1;
     $scope.active_acc = null;
     $scope.change_active = function(active) {
@@ -211,6 +211,24 @@ app.controller('listAccounts', ['$scope', 'getAccounts', function($scope, getAcc
         else {
             return '';
         }
+    };
+    $scope.deleteAccount = function(acc_num) {
+        $http({
+            method: 'POST',
+            url: '/api/delete_account',
+            headers: {'Content-Type': 'application/x-www-form-urlencoded'},
+            data: $.param({account: acc_num})
+        }).then(function(res) {
+            if(res.data == 0) {
+                $scope.loading();
+            }
+            else {
+                $scope.error_message = 'Incorrect data!';
+            }
+        }).catch(function(err) {
+            console.log(err);
+            $scope.error_message = 'Server error';
+        });
     };
     $scope.loading = function() {
         getAccounts($scope.active).then(function (accounts) {
