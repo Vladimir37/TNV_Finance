@@ -260,12 +260,20 @@ app.controller('listPositions', ['$scope', 'getPositions', function($scope, getP
             }
         }
     };
-    $scope.check_active = function(pos) {
-        if(pos.active) {
-            return 'Active';
+    $scope.check_type = function(type) {
+        if(type) {
+            return 'Buy';
         }
         else {
-            return 'Inactive';
+            return 'Sell';
+        }
+    };
+    $scope.check_active = function(pos) {
+        if(pos.active) {
+            return 'Opened';
+        }
+        else {
+            return 'Closed';
         }
     };
     $scope.get_class_activity = function(active) {
@@ -283,6 +291,19 @@ app.controller('listPositions', ['$scope', 'getPositions', function($scope, getP
         else {
             return '';
         }
+    };
+    // chart
+    $scope.get_class_period = function(period) {
+        if($scope.period == period) {
+            return 'btn btn-primary';
+        }
+        else {
+            return 'btn btn-default';
+        }
+    };
+    $scope.change_period = function(period) {
+        $scope.period = period;
+        $scope.create_chart();
     };
     $scope.loading = function() {
         var account_num = +window.location.hash.slice(1);

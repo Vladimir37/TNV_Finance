@@ -2,9 +2,10 @@
 
 {% block modal %}
     <article class="modal-header">
-        <h3>Account creating</h3>
+        <h3>New position</h3>
     </article>
     <article class="modal-body" ng-controller="creatingAccount">
+        //
     </article>
 {% endblock %}
 
@@ -19,8 +20,8 @@
                     <article class="main-list-group">
                         <article class="list-group-item main-list" ng-class="get_class_pos(position.id)" ng-click="change_pos(position.id)" ng-repeat="position in positions">
                             {[ position.symbol ]}
-                            <span class="badge" title="Number of positions">{[ position.open_positions ]}</span>
-                            <span class="badge" title="Current deposit">{[ position.calculated_value ]} USD</span>
+                            <span class="badge" title="Profit">{[ position.profit ]} USD</span>
+                            <span class="badge" title="Type of position">{[ check_type(position.buy) ]}</span>
                         </article>
                     </article>
                     <article class="btn btn-primary" data-toggle="modal" data-target="#modal">New</article>
@@ -36,9 +37,18 @@
             <article class="alert alert-danger" ng-if="error_message">
                 <b>{[ error_message ]}</b>
             </article>
-            <article class="panel panel-primary" ng-if="active_acc">
+            <article class="panel panel-primary" ng-if="active_pos">
                 <article class="panel-heading">{[ active_pos.symbol]}</article>
                 <article class="panel-body">
+                    <highchart id="chart1" config="chartConfig" class="span10"></highchart>
+                    <article class="btn-group btn-group-justified">
+                        <a ng-class="get_class_period('min')" ng-click="change_period('min')">1 minute</a>
+                        <a ng-class="get_class_period('min5')" ng-click="change_period('min5')">5 minutes</a>
+                        <a ng-class="get_class_period('min15')" ng-click="change_period('min15')">15 minutes</a>
+                        <a ng-class="get_class_period('min30')" ng-click="change_period('min30')">30 minutes</a>
+                        <a ng-class="get_class_period('hour')" ng-click="change_period('hour')">Hours</a>
+                        <a ng-class="get_class_period('day')" ng-click="change_period('day')">Days</a>
+                    </article>
                     <table class="table table-striped table-hover cabinet-table">
                         <tr>
                             <th>Field</th>
@@ -49,40 +59,47 @@
                             <td>{[ active_pos.id ]}</td>
                         </tr>
                         <tr>
-                            <td>Category</td>
-                            <td>{[ active_pos.category ]}</td>
+                            <td>Symbol</td>
+                            <td>{[ active_pos.symbol ]}</td>
                         </tr>
                         <tr>
-                            <td>Initial deposit</td>
-                            <td>{[ active_pos.initial_value ]}</td>
-                        </tr>
-                        <tr>
-                            <td>Current deposit</td>
-                            <td>{[ active_pos.current_value ]}</td>
-                        </tr>
-                        <tr>
-                            <td>Calculated deposit</td>
-                            <td>{[ active_pos.calculated_value ]}</td>
+                            <td>Type</td>
+                            <td>{[ check_type(active_pos.buy) ]}</td>
                         </tr>
                         <tr>
                             <td>Profit</td>
-                            <td>{[ active_pos.profit ]}</td>
+                            <td>{[ active_pos.profit ]} USD</td>
                         </tr>
                         <tr>
-                            <td>Open positions</td>
-                            <td>{[ active_pos.open_positions ]}</td>
+                            <td>Start date</td>
+                            <td>{[ active_pos.start_date | date:'hh:mm dd/MM/yyyy' ]}</td>
                         </tr>
                         <tr>
-                            <td>Closed positions</td>
-                            <td>{[ active_pos.closed_positions ]}</td>
+                            <td>Start price</td>
+                            <td>{[ active_pos.start_price ]}</td>
+                        </tr>
+                        <tr>
+                            <td>End date</td>
+                            <td>{[ active_pos.end_date | date:'hh:mm dd/MM/yyyy' ]}</td>
+                        </tr>
+                        <tr>
+                            <td>End price</td>
+                            <td>{[ active_pos.end_price ]}</td>
+                        </tr>
+                        <tr>
+                            <td>Stop-Loss</td>
+                            <td>{[ active_pos.sl ]}</td>
+                        </tr>
+                        <tr>
+                            <td>Take-Profit</td>
+                            <td>{[ active_pos.tp ]}</td>
                         </tr>
                         <tr>
                             <td>Status</td>
                             <td>{[ check_active(active_pos) ]}</td>
                         </tr>
                     </table>
-                    <a class="btn btn-primary" href="/positions#{[ active_acc.id ]}">Details</a>
-                    <button class="btn btn-danger" ng-click="deleteAccount(active_acc.id)">Delete account</button>
+                    <button class="btn btn-primary">Close</button>
                 </article>
             </article>
         </article>
