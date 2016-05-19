@@ -12,5 +12,4 @@ urlpatterns = [
     url(r'^cabinet/$', cabinet, name='cabinet'),
     url(r'^accounts/$', accounts, name='accounts'),
     url(r'^create_position/$', create_position, name='create_position'),
-    url(r'^close_position/$', close_position, name='close_position')
 ]

@@ -195,6 +195,7 @@ def close_position(position, type):
     position.profit = profit
     position.closing_way = type
     account.value += profit
+    account.value = float('%.2f' % account.value)
     account.profit += profit
     try:
         position.save()

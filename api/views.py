@@ -60,7 +60,7 @@ def get_accounts(request):
     accounts_raw = Account.objects.filter(user=username, active=active)
     accounts = []
     for account in accounts_raw:
-        positions = Position.objects.filter(owner=account)
+        positions = Position.objects.filter(owner=account, active=True)
         total_value = 0
         for position in positions:
             total_value += get_position_value(position)

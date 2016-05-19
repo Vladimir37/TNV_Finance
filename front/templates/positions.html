@@ -80,26 +80,30 @@
                         </tr>
                         <tr>
                             <td>End date</td>
-                            <td>{[ active_pos.end_date | date:'hh:mm dd/MM/yyyy' ]}</td>
+                            <td>{[ active_pos.end_date | date:'hh:mm dd/MM/yyyy' || 'None' ]}</td>
                         </tr>
                         <tr>
                             <td>End price</td>
-                            <td>{[ active_pos.end_price ]}</td>
+                            <td>{[ active_pos.end_price || 'None' ]}</td>
                         </tr>
                         <tr>
                             <td>Stop-Loss</td>
-                            <td>{[ active_pos.sl ]}</td>
+                            <td>{[ active_pos.sl || 'None' ]}</td>
                         </tr>
                         <tr>
                             <td>Take-Profit</td>
-                            <td>{[ active_pos.tp ]}</td>
+                            <td>{[ active_pos.tp || 'None' ]}</td>
+                        </tr>
+                        <tr>
+                            <td>Type of closing</td>
+                            <td>{[ get_closing_way(active_pos.closing_way) ]}</td>
                         </tr>
                         <tr>
                             <td>Status</td>
                             <td>{[ check_active(active_pos) ]}</td>
                         </tr>
                     </table>
-                    <button class="btn btn-primary">Close</button>
+                    <button class="btn btn-primary" ng-click="closing(active_pos.id)">Close</button>
                 </article>
             </article>
         </article>

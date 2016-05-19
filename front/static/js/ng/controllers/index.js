@@ -245,9 +245,10 @@ app.controller('listAccounts', ['$scope', '$http', 'getAccounts', function($scop
     $scope.loading();
 }]);
 
-app.controller('listPositions', ['$scope', 'getPositions', function($scope, getPositions) {
+app.controller('listPositions', ['$scope', '$http', 'getQuotes', 'getPositions', function($scope, $http, getQuotes, getPositions) {
     $scope.active = 1;
     $scope.active_pos = null;
+    $scope.period = 'day';
     $scope.change_active = function(active) {
         $scope.active = active;
         $scope.loading();
@@ -292,6 +293,23 @@ app.controller('listPositions', ['$scope', 'getPositions', function($scope, getP
             return '';
         }
     };
+    $scope.get_closing_way = function(num) {
+        if(num == 0) {
+            return 'Manually';
+        }
+        else if(num == 1) {
+            return 'Take-Profit';
+        }
+        else if(num == 2) {
+            return 'Stop-Loss';
+        }
+        else if(num == 3) {
+            return 'Margin Call';
+        }
+        else {
+            return '';
+        }
+    };
     // chart
     $scope.get_class_period = function(period) {
         if($scope.period == period) {
@@ -305,23 +323,78 @@ app.controller('listPositions', ['$scope', 'getPositions', function($scope, getP
         $scope.period = period;
         $scope.create_chart();
     };
-    $scope.loading = function() {
-        var account_num = +window.location.hash.slice(1);
-        if (!account_num) {
-            $scope.error_message = 'Incorrect account!';
-        }
-        else {
-            getPositions($scope.active, account_num).then(function (positions) {
-                $scope.positions = positions.data;
-                if (positions.data.length) {
-                    $scope.active_pos = positions.data[0];
-                }
+    $scope.closing = function(num) {
+        var req_data = {
+            account: account_num,
+            position: num
+        };
+        $http({
+            method: 'POST',
+            url: '/api/close_position',
+            headers: {'Content-Type': 'application/x-www-form-urlencoded'},
+            data: $.param(req_data)
+        }).then(function(res) {
+            if(res.data == 0) {
+                $scope.loading();
+            }
+            else {
+                $scope.error_message = 'Server error';
+            }
+        }).catch(function(err) {
+            console.log(err);
+            $scope.error_message = 'Server error';
+        });
+    };
+    $scope.create_chart = function() {
+        if($scope.active_pos) {
+            getQuotes($scope.active_pos.symbol, $scope.period).then(function (quotes) {
+                $scope.chartConfig = {
+                    options: {
+                        chart: {
+                            type: 'candlestick',
+                            zoomType: 'x'
+                        },
+                        rangeSelector: {
+                            enabled: true
+                        },
+                        navigator: {
+                            enabled: true
+                        }
+                    },
+                    series: [{
+                        id: 1,
+                        data: quotes
+                    }],
+                    title: {
+                        text: $scope.active_pos.symbol + ' (' + $scope.period + ')'
+                    },
+                    useHighStocks: true
+                };
+                $scope.quotes = quotes;
             }).catch(function (err) {
                 console.log(err);
                 $scope.error_message = 'Server error';
             });
         }
     };
+    $scope.loading = function() {
+        getPositions($scope.active, account_num).then(function (positions) {
+            $scope.positions = positions.data;
+            if (positions.data.length) {
+                $scope.active_pos = positions.data[0];
+            }
+            $scope.create_chart();
+        }).catch(function (err) {
+            console.log(err);
+            $scope.error_message = 'Server error';
+        });
+    };
     // start
-    $scope.loading();
+    var account_num = +window.location.hash.slice(1);
+    if (!account_num) {
+        $scope.error_message = 'Incorrect account!';
+    }
+    else {
+        $scope.loading();
+    }
 }]);
