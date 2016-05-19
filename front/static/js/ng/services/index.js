@@ -134,3 +134,17 @@ app.factory('getPositions', ['$http', function($http) {
         });
     }
 }]);
+
+app.factory('getAccountData', ['$http', function($http) {
+    return function(num) {
+        return $http({
+            url: '/api/get_account_data',
+            method: 'GET',
+            params: {account: num}
+        }).then(function (data) {
+            return data;
+        }).catch(function (err) {
+            return err;
+        });
+    }
+}]);

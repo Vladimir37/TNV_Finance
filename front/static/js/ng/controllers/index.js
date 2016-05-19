@@ -364,6 +364,12 @@ app.controller('listPositions', ['$scope', '$http', 'getQuotes', 'getPositions',
                     series: [{
                         id: 1,
                         data: quotes
+                    }, {
+                        type: 'flags',
+                        name: 'Position events',
+                        data: $scope.events,
+                        onSeries: 1,
+                        shape: 'squarepin'
                     }],
                     title: {
                         text: $scope.active_pos.symbol + ' (' + $scope.period + ')'
@@ -383,10 +389,64 @@ app.controller('listPositions', ['$scope', '$http', 'getQuotes', 'getPositions',
             if (positions.data.length) {
                 $scope.active_pos = positions.data[0];
             }
+            var positions_event = [];
+            for(var position in $scope.positions) {
+                positions_event.push({
+                    x: +new Date($scope.positions[position].start_date),
+                    title: 'Open ' + $scope.positions[position].id
+                });
+                if(!$scope.positions[position].active) {
+                    positions_event.push({
+                        x: +new Date($scope.positions[position].end_date),
+                        title: 'Close ' + $scope.positions[position].id
+                    });
+                }
+            }
+            $scope.events = positions_event;
             $scope.create_chart();
         }).catch(function (err) {
             console.log(err);
             $scope.error_message = 'Server error';
+        });
+    };
+    // start
+    var account_num = +window.location.hash.slice(1);
+    if (!account_num) {
+        $scope.error_message = 'Incorrect account!';
+    }
+    else {
+        $scope.loading();
+    }
+}]);
+
+app.controller('creatingPosition', ['$scope', '$http', 'getQuotes', 'allSymbols', 'getAccountData', function($scope, $http, getQuotes, allSymbols, getAccountData) {
+    $scope.period = 'hour';
+    $scope.get_class_period = function(period) {
+        if($scope.period == period) {
+            return 'btn btn-primary';
+        }
+        else {
+            return 'btn btn-default';
+        }
+    };
+    $scope.change_period = function(period) {
+        $scope.period = period;
+        $scope.create_chart();
+    };
+    $scope.change_symbol = function(symbol) {
+        //
+    };
+    $scope.loading = function() {
+        allSymbols.then(function(categories) {
+            $scope.categories = categories;
+        }).then(function () {
+            return getAccountData(account_num)
+        }).then(function(acc_data) {
+            $scope.acc = acc_data.data;
+            $scope.symbols = $scope.categories[$scope.acc.category];
+        }).catch(function (err) {
+            $scope.error_message = 'Server error';
+            console.log(err);
         });
     };
     // start

@@ -80,6 +80,24 @@ def get_accounts(request):
     return HttpResponse(json.dumps(accounts), content_type='application/json')
 
 @login_required()
+def get_account_data(request):
+    username = request.user
+    try:
+        account_num = int(request.GET.get('account', 0))
+        target_account = Account.objects.get(pk=account_num, user=username)
+        account_data = {
+            'category': target_account.category.name,
+            'initial_value': target_account.initial_value,
+            'value': target_account.value,
+            'leverage': target_account.leverage,
+            'profit': target_account.profit,
+            'active': target_account.active,
+        }
+        return HttpResponse(json.dumps(account_data), content_type='application/json')
+    except:
+        return HttpResponse(json.dumps(1), content_type='application/json')
+
+@login_required()
 def get_positions(request):
     username = request.user
     try:
@@ -90,6 +108,10 @@ def get_positions(request):
         positions = []
         for position in positions_raw:
             end_date = position.end_date
+            if position.profit == None:
+                profit = get_position_value(position)
+            else:
+                profit = position.profit
             if end_date:
                 end_date = position.end_date.isoformat()
             current_position = {
@@ -102,7 +124,7 @@ def get_positions(request):
                 'value': position.value,
                 'end_date': end_date,
                 'end_price': position.end_price,
-                'profit': position.profit or get_position_value(position),
+                'profit': profit,
                 'sl': position.sl,
                 'tp': position.tp,
                 'closing_way': position.closing_way

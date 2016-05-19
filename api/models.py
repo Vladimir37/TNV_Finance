@@ -33,7 +33,7 @@ class Position(models.Model):
     start_date = models.DateTimeField()
     end_price = models.FloatField(null=True)
     end_date = models.DateTimeField(null=True)
-    profit = models.IntegerField(null=True)
+    profit = models.FloatField(null=True)
     sl = models.FloatField(null=True)
     tp = models.FloatField(null=True)
     value = models.FloatField()

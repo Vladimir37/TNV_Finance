@@ -4,8 +4,16 @@
     <article class="modal-header">
         <h3>New position</h3>
     </article>
-    <article class="modal-body" ng-controller="creatingAccount">
-        //
+    <article class="modal-body" ng-controller="creatingPosition">
+        <highchart id="chart1" config="chartConfig" class="span10"></highchart>
+        <article class="btn-group btn-group-justified">
+            <a ng-class="get_class_period('min')" ng-click="change_period('min')">1 minute</a>
+            <a ng-class="get_class_period('min5')" ng-click="change_period('min5')">5 minutes</a>
+            <a ng-class="get_class_period('min15')" ng-click="change_period('min15')">15 minutes</a>
+            <a ng-class="get_class_period('min30')" ng-click="change_period('min30')">30 minutes</a>
+            <a ng-class="get_class_period('hour')" ng-click="change_period('hour')">Hours</a>
+            <a ng-class="get_class_period('day')" ng-click="change_period('day')">Days</a>
+        </article>
     </article>
 {% endblock %}
 
