@@ -5,7 +5,10 @@
         <h3>New position</h3>
     </article>
     <article class="modal-body" ng-controller="creatingPosition">
-        <highchart id="chart1" config="chartConfig" class="span10"></highchart>
+        <article class="alert alert-danger" ng-if="error_message">
+            <b>{[ error_message ]}</b>
+        </article>
+        <highchart id="chart2" config="chartConfig" class="span10"></highchart>
         <article class="btn-group btn-group-justified">
             <a ng-class="get_class_period('min')" ng-click="change_period('min')">1 minute</a>
             <a ng-class="get_class_period('min5')" ng-click="change_period('min5')">5 minutes</a>
@@ -13,6 +16,34 @@
             <a ng-class="get_class_period('min30')" ng-click="change_period('min30')">30 minutes</a>
             <a ng-class="get_class_period('hour')" ng-click="change_period('hour')">Hours</a>
             <a ng-class="get_class_period('day')" ng-click="change_period('day')">Days</a>
+        </article>
+        <article class="table_types">
+            <h4>{[ acc.category ]}</h4>
+            <article class="row">
+                <article class="index_symbol col-md-6" ng-repeat="symbol in symbols">
+                    <article class="name" ng-class="get_class_symbol(symbol.code)" ng-click="change_symbol({name: symbol.name, code: symbol.code})">{[ symbol.name ]}</article>
+                    <article class="value {[ symbol.color ]}">{[ symbol.price ]}</article>
+                    <img class="arrow" ng-src="{[ '/static/imgs/staff/' + symbol.arrow ]}" alt="arrow"/>
+                </article>
+            </article>
+        </article>
+        <article class="order_type btn-group btn-group-justified">
+            <a ng-class="get_class_type('buy')" ng-click="change_type('buy')">Buy</a>
+            <a ng-class="get_class_type('sell')" ng-click="change_type('sell')">Sell</a>
+        </article>
+        <article class="order_data">
+            <label>
+                Value (not more than {[ acc.leverage * acc.value ]} USD)<br/>
+                <input type="text" placeholder="Value"/>
+            </label>
+            <label>
+                Take-Profit ()
+                <input type="text"/>
+            </label>
+            <label>
+                Stop-Loss ()
+                <input type="text"/>
+            </label>
         </article>
     </article>
 {% endblock %}

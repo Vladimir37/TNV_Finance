@@ -421,6 +421,7 @@ app.controller('listPositions', ['$scope', '$http', 'getQuotes', 'getPositions',
 
 app.controller('creatingPosition', ['$scope', '$http', 'getQuotes', 'allSymbols', 'getAccountData', function($scope, $http, getQuotes, allSymbols, getAccountData) {
     $scope.period = 'hour';
+    $scope.type = 'buy';
     $scope.get_class_period = function(period) {
         if($scope.period == period) {
             return 'btn btn-primary';
@@ -429,21 +430,72 @@ app.controller('creatingPosition', ['$scope', '$http', 'getQuotes', 'allSymbols'
             return 'btn btn-default';
         }
     };
+    $scope.get_class_symbol = function(symbol) {
+        if($scope.symbol.code == symbol) {
+            return 'primary-symbol';
+        }
+        else {
+            return '';
+        }
+    };
     $scope.change_period = function(period) {
         $scope.period = period;
         $scope.create_chart();
     };
     $scope.change_symbol = function(symbol) {
-        //
+        $scope.symbol = symbol;
+        $scope.create_chart();
+    };
+    $scope.change_type = function(type) {
+        $scope.type = type;
+    };
+    $scope.get_class_type = function(type) {
+        if($scope.type == type) {
+            return 'btn btn-primary';
+        }
+        else {
+            return 'btn btn-default';
+        }
+    };
+    $scope.create_chart = function() {
+        getQuotes($scope.symbol.code, $scope.period).then(function (quotes) {
+            $scope.chartConfig = {
+                options: {
+                    chart: {
+                        type: 'candlestick',
+                        zoomType: 'x'
+                    },
+                    rangeSelector: {
+                        enabled: true
+                    },
+                    navigator: {
+                        enabled: true
+                    }
+                },
+                series: [{
+                    id: 1,
+                    data: quotes
+                }],
+                title: {
+                    text: $scope.symbol.code + ' (' + $scope.period + ')'
+                },
+                useHighStocks: true
+            };
+            $scope.quotes = quotes;
+        }).catch(function (err) {
+            console.log(err);
+            $scope.error_message = 'Server error';
+        });
     };
     $scope.loading = function() {
         allSymbols.then(function(categories) {
             $scope.categories = categories;
-        }).then(function () {
             return getAccountData(account_num)
         }).then(function(acc_data) {
             $scope.acc = acc_data.data;
             $scope.symbols = $scope.categories[$scope.acc.category];
+            $scope.symbol = $scope.symbols[0];
+            $scope.create_chart();
         }).catch(function (err) {
             $scope.error_message = 'Server error';
             console.log(err);

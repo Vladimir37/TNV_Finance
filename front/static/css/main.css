@@ -83,6 +83,12 @@
 .cabinet-table tr td:last-child {
     text-align: right;
 }
+.order_type {
+    margin: 10px 0;
+}
+.order_data label {
+    font-size: 16px;
+}
 
 /* helpers*/
 .red {
