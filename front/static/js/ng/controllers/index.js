@@ -457,6 +457,23 @@ app.controller('creatingPosition', ['$scope', '$http', 'getQuotes', 'allSymbols'
             return 'btn btn-default';
         }
     };
+    $scope.get_order_word = function(type, order, price) {
+        if(type == 'buy' && order == 'tp') {
+            return 'not less than ' + (price + 0.1);
+        }
+        else if(type == 'sell' && order == 'tp') {
+            return 'not more than ' + (price - 0.1);
+        }
+        else if(type == 'buy' && order == 'sl') {
+            return 'not more than ' + (price - 0.1);
+        }
+        else if(type == 'sell' && order == 'sl'){
+            return 'not less than ' + (price + 0.1);
+        }
+        else {
+            return 'Incorrect';
+        }
+    };
     $scope.create_chart = function() {
         getQuotes($scope.symbol.code, $scope.period).then(function (quotes) {
             $scope.chartConfig = {

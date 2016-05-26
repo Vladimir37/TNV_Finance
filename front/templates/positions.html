@@ -33,18 +33,19 @@
         </article>
         <article class="order_data">
             <label>
-                Value (not more than {[ acc.leverage * acc.value ]} USD)<br/>
                 <input type="text" placeholder="Value"/>
-            </label>
+                Value (not more than {[ acc.leverage * acc.value ]} USD)
+            </label><br/>
             <label>
-                Take-Profit ()
-                <input type="text"/>
-            </label>
+                <input type="text" placeholder="Take-Profit"/>
+                Take-Profit ({[ get_order_word(type, 'tp', symbol.price)]})
+            </label><br/>
             <label>
-                Stop-Loss ()
-                <input type="text"/>
-            </label>
+                <input type="text" placeholder="Stop-Loss"/>
+                Stop-Loss ({[ get_order_word(type, 'sl', symbol.price) ]})
+            </label><br/>
         </article>
+        <button class="btn btn-primary">Open position</button>
     </article>
 {% endblock %}
 
