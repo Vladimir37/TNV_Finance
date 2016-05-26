@@ -5,6 +5,9 @@
         <h3>New position</h3>
     </article>
     <article class="modal-body" ng-controller="creatingPosition">
+        <article class="alert alert-success" ng-if="success_message">
+            <b>{[ success_message ]}</b>
+        </article>
         <article class="alert alert-danger" ng-if="error_message">
             <b>{[ error_message ]}</b>
         </article>
@@ -33,19 +36,19 @@
         </article>
         <article class="order_data">
             <label>
-                <input type="text" placeholder="Value"/>
+                <input type="text" placeholder="Value" ng-model="position_data.value" required/>
                 Value (not more than {[ acc.leverage * acc.value ]} USD)
             </label><br/>
             <label>
-                <input type="text" placeholder="Take-Profit"/>
+                <input type="text" placeholder="Take-Profit" ng-model="position_data.take_profit"/>
                 Take-Profit ({[ get_order_word(type, 'tp', symbol.price)]})
             </label><br/>
             <label>
-                <input type="text" placeholder="Stop-Loss"/>
+                <input type="text" placeholder="Stop-Loss" ng-model="position_data.stop_loss"/>
                 Stop-Loss ({[ get_order_word(type, 'sl', symbol.price) ]})
             </label><br/>
         </article>
-        <button class="btn btn-primary">Open position</button>
+        <button class="btn btn-primary" ng-click="submit()">Open position</button>
     </article>
 {% endblock %}
 
@@ -107,6 +110,10 @@
                             <td>{[ check_type(active_pos.buy) ]}</td>
                         </tr>
                         <tr>
+                            <td>Value</td>
+                            <td>{[ active_pos.value ]} USD</td>
+                        </tr>
+                        <tr>
                             <td>Profit</td>
                             <td>{[ active_pos.profit ]} USD</td>
                         </tr>
@@ -120,7 +127,7 @@
                         </tr>
                         <tr>
                             <td>End date</td>
-                            <td>{[ active_pos.end_date | date:'hh:mm dd/MM/yyyy' || 'None' ]}</td>
+                            <td>{[ (active_pos.end_date | date:'hh:mm dd/MM/yyyy') || 'None' ]}</td>
                         </tr>
                         <tr>
                             <td>End price</td>

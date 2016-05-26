@@ -422,6 +422,11 @@ app.controller('listPositions', ['$scope', '$http', 'getQuotes', 'getPositions',
 app.controller('creatingPosition', ['$scope', '$http', 'getQuotes', 'allSymbols', 'getAccountData', function($scope, $http, getQuotes, allSymbols, getAccountData) {
     $scope.period = 'hour';
     $scope.type = 'buy';
+    $scope.position_data = {
+        value: 0,
+        sl: null,
+        tp: null
+    };
     $scope.get_class_period = function(period) {
         if($scope.period == period) {
             return 'btn btn-primary';
@@ -503,6 +508,35 @@ app.controller('creatingPosition', ['$scope', '$http', 'getQuotes', 'allSymbols'
             console.log(err);
             $scope.error_message = 'Server error';
         });
+    };
+    $scope.submit = function() {
+        var req_data = angular.copy($scope.position_data);
+        req_data.type = $scope.type;
+        req_data.symbol = $scope.symbol.code;
+        req_data.account = account_num;
+        if(!$scope.position_data.value) {
+            $scope.error_message = 'Required fields are empty!';
+        }
+        else {
+            $scope.error_message = null;
+            $http({
+                method: 'POST',
+                url: '/api/create_position',
+                headers: {'Content-Type': 'application/x-www-form-urlencoded'},
+                data: $.param(req_data)
+            }).then(function (res) {
+                if (res.data == 0) {
+                    $scope.success_message = 'Position was created!';
+                    $scope.loading();
+                }
+                else {
+                    $scope.error_message = 'Position can not be opened';
+                }
+            }).catch(function (err) {
+                console.log(err);
+                $scope.error_message = 'Server error';
+            });
+        }
     };
     $scope.loading = function() {
         allSymbols.then(function(categories) {
