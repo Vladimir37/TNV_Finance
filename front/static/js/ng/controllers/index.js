@@ -51,7 +51,7 @@ app.controller('login', ['$scope', '$http', function($scope, $http) {
                 data: $.param($scope.userdata)
             }).then(function(res) {
                 if(res.data == 0) {
-                    window.location.pathname = '/cabinet';
+                    window.location.pathname = '/accounts';
                 }
                 else {
                     $scope.error_message = 'Incorrect login or password!';
@@ -154,7 +154,7 @@ app.controller('creatingAccount', ['$scope', '$http', 'getCategories', function(
             data: $.param($scope.userdata)
         }).then(function(res) {
             if(res.data == 0) {
-                window.location.pathname = '/cabinet';
+                window.location.pathname = '/accounts';
             }
             else {
                 $scope.error_message = 'Incorrect data!';
@@ -463,17 +463,18 @@ app.controller('creatingPosition', ['$scope', '$http', 'getQuotes', 'allSymbols'
         }
     };
     $scope.get_order_word = function(type, order, price) {
+        price = parseFloat(price);
         if(type == 'buy' && order == 'tp') {
-            return 'not less than ' + (price + 0.1);
+            return 'not less than ' + (price + 0.1).toFixed(4);
         }
         else if(type == 'sell' && order == 'tp') {
-            return 'not more than ' + (price - 0.1);
+            return 'not more than ' + (price - 0.1).toFixed(4);
         }
         else if(type == 'buy' && order == 'sl') {
-            return 'not more than ' + (price - 0.1);
+            return 'not more than ' + (price - 0.1).toFixed(4);
         }
         else if(type == 'sell' && order == 'sl'){
-            return 'not less than ' + (price + 0.1);
+            return 'not less than ' + (price + 0.1).toFixed(4);
         }
         else {
             return 'Incorrect';

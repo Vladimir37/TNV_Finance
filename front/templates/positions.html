@@ -150,7 +150,7 @@
                             <td>{[ check_active(active_pos) ]}</td>
                         </tr>
                     </table>
-                    <button class="btn btn-primary" ng-click="closing(active_pos.id)">Close</button>
+                    <button ng-if="active_pos.active" class="btn btn-primary" ng-click="closing(active_pos.id)">Close</button>
                 </article>
             </article>
         </article>

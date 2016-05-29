@@ -9,7 +9,5 @@ urlpatterns = [
     url(r'^tables/$', TemplateView.as_view(template_name='tables.html'), name='tables'),
     url(r'^charts/$', TemplateView.as_view(template_name='charts.html'), name='charts'),
     url(r'^positions/$', positions, name='positions'),
-    url(r'^cabinet/$', cabinet, name='cabinet'),
     url(r'^accounts/$', accounts, name='accounts'),
-    url(r'^create_position/$', create_position, name='create_position'),
 ]
