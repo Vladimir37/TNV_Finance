@@ -1,4 +1,4 @@
-from django.shortcuts import render
+from django.db.models import Sum
 from django.contrib.auth.decorators import login_required
 from django.http import HttpResponse
 
@@ -133,3 +133,16 @@ def get_positions(request):
         return HttpResponse(json.dumps(positions), content_type='application/json')
     except:
         return HttpResponse(json.dumps(1), content_type='application/json')
+
+@login_required()
+def statistic(request):
+    current_user = request.user
+    target_accounts = Account.objects.filter(user=current_user)
+    target_data = {
+        'account_act': Account.objects.filter(user=current_user, active=True).count(),
+        'account_inact': Account.objects.filter(user=current_user, active=False).count(),
+        'total_profit': Position.objects.filter(owner=target_accounts).aggregate(Sum('profit'))['profit__sum'],
+        'opened_positions': Position.objects.filter(owner=target_accounts, active=True).count(),
+        'closed_positions': Position.objects.filter(owner=target_accounts, active=False).count()
+    }
+    return HttpResponse(json.dumps(target_data), content_type='application/json')

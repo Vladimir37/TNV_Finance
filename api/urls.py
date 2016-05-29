@@ -1,5 +1,5 @@
 from django.conf.urls import url, include
-from api.views import types, all_symbols, get_quotes, get_accounts, get_positions, get_current_many, get_account_data
+from api.views import types, all_symbols, get_quotes, get_accounts, get_positions, get_current_many, get_account_data, statistic
 from api.utils import registration, login, logout, pass_change, add_account, delete_account, create_position, manually_close_position
 
 urlpatterns = [
@@ -17,6 +17,7 @@ urlpatterns = [
     url(r'^get_accounts', get_accounts, name='get_accounts'),
     url(r'^get_account_data', get_account_data, name='get_account_data'),
     url(r'^get_positions', get_positions, name='get_positions'),
+    url(r'^statistic', statistic, name='statistic'),
     # actions for user
     url(r'^add_account', add_account, name='add_account'),
     url(r'^delete_account', delete_account, name='delete_account'),

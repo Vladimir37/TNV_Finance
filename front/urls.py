@@ -10,4 +10,5 @@ urlpatterns = [
     url(r'^charts/$', TemplateView.as_view(template_name='charts.html'), name='charts'),
     url(r'^positions/$', positions, name='positions'),
     url(r'^accounts/$', accounts, name='accounts'),
+    url(r'^personal/$', TemplateView.as_view(template_name='personal.html'), name='personal')
 ]

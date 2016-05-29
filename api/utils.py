@@ -112,30 +112,31 @@ def create_position(request):
     type_is_buy = False
     if request.POST.get('type', 'Incorrect') == 'buy':
         type_is_buy = True
-    target_symbol = Symbol.objects.get(code=symbol_code)
-    start_price = get_current(symbol_code)
-    account = Account.objects.get(pk=account_num, user=current_user, active=True)
-    value = int(value)
-    if value < 0 or value > account.leverage * account.value:
-        raise AttributeError
-    if take_profit:
-        take_profit = float(take_profit)
-        if type_is_buy and (take_profit < start_price):
+    try:
+        target_symbol = Symbol.objects.get(code=symbol_code)
+        start_price = get_current(symbol_code)
+        account = Account.objects.get(pk=account_num, user=current_user, active=True)
+        value = int(value)
+        if value < 0 or value > account.leverage * account.value:
             raise AttributeError
-        elif not type_is_buy and (take_profit > start_price):
-            raise AttributeError
-    else:
-        take_profit = None
-    if stop_loss:
-        stop_loss = float(stop_loss)
-        if type_is_buy and (stop_loss > start_price):
-            raise AttributeError
-        elif not type_is_buy and (stop_loss < start_price):
-            raise AttributeError
-    else:
-        stop_loss = None
-    # except:
-    #     return render(request, 'api.html', {'data': 1})
+        if take_profit:
+            take_profit = float(take_profit)
+            if type_is_buy and (take_profit < start_price):
+                raise AttributeError
+            elif not type_is_buy and (take_profit > start_price):
+                raise AttributeError
+        else:
+            take_profit = None
+        if stop_loss:
+            stop_loss = float(stop_loss)
+            if type_is_buy and (stop_loss > start_price):
+                raise AttributeError
+            elif not type_is_buy and (stop_loss < start_price):
+                raise AttributeError
+        else:
+            stop_loss = None
+    except:
+        return render(request, 'api.html', {'data': 1})
     Position.objects.create(owner=account, symbol=target_symbol, buy=type_is_buy,
                                 start_price=start_price, start_date=start_date, tp=take_profit,
                                 sl=stop_loss, value=value)

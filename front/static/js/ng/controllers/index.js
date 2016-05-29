@@ -562,3 +562,55 @@ app.controller('creatingPosition', ['$scope', '$http', 'getQuotes', 'allSymbols'
         $scope.loading();
     }
 }]);
+
+app.controller('personal', ['$scope', '$http', function($scope, $http) {
+    $scope.pass = {};
+    $scope.pass_message = null;
+    $scope.success_message = null;
+    $scope.change_pass = function() {
+        if(!$scope.pass.new1 || !$scope.pass.new2 || !$scope.pass.old) {
+            $scope.pass_message = 'Required fields are empty!'
+        }
+        else if($scope.pass.new1 != $scope.pass.new2) {
+            $scope.pass_message = 'Entered passwords are not identical!'
+        }
+        else {
+            var req_data = {
+                old_password: $scope.pass.old,
+                new_password: $scope.pass.new1
+            };
+            $http({
+                method: 'POST',
+                url: '/api/pass_change',
+                headers: {'Content-Type': 'application/x-www-form-urlencoded'},
+                data: $.param(req_data)
+            }).then(function(response) {
+                if(response.data == 0) {
+                    $scope.pass_message = null;
+                    $scope.success_message = 'Password was changed!';
+                    $scope.pass = {};
+                }
+                else {
+                    $scope.pass_message = 'Incorrect old password!';
+                }
+            }).catch(function (err) {
+                $scope.error_message = 'Server error';
+                console.log(err);
+            });
+        }
+    };
+    $scope.loading = function() {
+        $http({
+            method: 'GET',
+            url: '/api/statistic',
+            headers: {'Content-Type': 'application/x-www-form-urlencoded'}
+        }).then(function(user_data) {
+            $scope.user_data = user_data.data;
+        }).catch(function (err) {
+            $scope.error_message = 'Server error';
+            console.log(err);
+        });
+    };
+    // start
+    $scope.loading();
+}]);

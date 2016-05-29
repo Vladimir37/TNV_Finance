@@ -1,0 +1,58 @@
+{% extends "_layout_.html" %}
+
+{% block content %}
+    <div class="cabinet-panel">
+        <h2>Welcome, {{ user.get_username }}!</h2>
+        <article class="panel panel-primary" ng-controller="personal">
+            <article class="panel-heading">Statistic</article>
+            <article class="panel-body">
+                <article class="alert alert-danger" ng-if="error_message">
+                    <b>{[ error_message ]}</b>
+                </article>
+                <table class="table table-striped table-hover cabinet-table">
+                    <tr>
+                        <th>Field</th>
+                        <th>Value</th>
+                    </tr>
+                    <tr>
+                        <td>Total profit</td>
+                        <td>{[ user_data.total_profit ]}</td>
+                    </tr>
+                    <tr>
+                        <td>Active accounts</td>
+                        <td>{[ user_data.account_act ]}</td>
+                    </tr>
+                    <tr>
+                        <td>Inactive accounts</td>
+                        <td>{[ user_data.account_inact ]}</td>
+                    </tr>
+                    <tr>
+                        <td>Opened positions</td>
+                        <td>{[ user_data.opened_positions ]}</td>
+                    </tr>
+                    <tr>
+                        <td>Closed positions</td>
+                        <td>{[ user_data.closed_positions ]}</td>
+                    </tr>
+                </table>
+                <h3>Change password</h3>
+                <article class="alert alert-success" ng-if="success_message">
+                    <b>{[ success_message ]}</b>
+                </article>
+                <article class="alert alert-danger" ng-if="pass_message">
+                    <b>{[ pass_message ]}</b>
+                </article>
+                <label>
+                    <input type="password" class="form-control" placeholder="Old password" ng-model="pass.old"/>
+                </label><br/>
+                <label>
+                    <input type="password" class="form-control" placeholder="New password" ng-model="pass.new1"/>
+                </label><br/>
+                <label>
+                    <input type="password" class="form-control" placeholder="New password again" ng-model="pass.new2"/>
+                </label><br/>
+                <button class="btn btn-primary" ng-click="change_pass()">Change</button>
+            </article>
+        </article>
+    </div>
+{% endblock %}
