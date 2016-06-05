@@ -5,7 +5,7 @@
         <article class="alert alert-danger" ng-if="error_message">
                 <b>{[ error_message ]}</b>
         </article>
-        <highchart id="chart1" config="chartConfig" class="span10"></highchart>
+        <chart quotes="quotes" events="null" symbol="symbol.code" period="period"></chart>
         <article class="btn-group btn-group-justified">
             <a ng-class="get_class_period('min')" ng-click="change_period('min')">1 minute</a>
             <a ng-class="get_class_period('min5')" ng-click="change_period('min5')">5 minutes</a>
