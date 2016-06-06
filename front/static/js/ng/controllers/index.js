@@ -105,28 +105,6 @@ app.controller('allCharts', ['$scope', 'getQuotes', 'allSymbols', function($scop
     };
     $scope.create_chart = function() {
         getQuotes($scope.symbol.code, $scope.period).then(function(quotes) {
-            $scope.chartConfig = {
-                options: {
-                    chart: {
-                        type: 'candlestick',
-                        zoomType: 'x'
-                    },
-                    rangeSelector: {
-                        enabled: true
-                    },
-                    navigator: {
-                        enabled: true
-                    }
-                },
-                series: [{
-                    id: 1,
-                    data: quotes
-                }],
-                title: {
-                    text: $scope.symbol.code + ' (' + $scope.period + ')'
-                },
-                useHighStocks: true
-            };
             $scope.quotes = quotes;
         }).catch(function (err) {
             console.log(err);
@@ -482,28 +460,6 @@ app.controller('creatingPosition', ['$scope', '$http', 'getQuotes', 'allSymbols'
     };
     $scope.create_chart = function() {
         getQuotes($scope.symbol.code, $scope.period).then(function (quotes) {
-            //$scope.chartConfig = {
-            //    options: {
-            //        chart: {
-            //            type: 'candlestick',
-            //            zoomType: 'x'
-            //        },
-            //        rangeSelector: {
-            //            enabled: true
-            //        },
-            //        navigator: {
-            //            enabled: true
-            //        }
-            //    },
-            //    series: [{
-            //        id: 1,
-            //        data: quotes
-            //    }],
-            //    title: {
-            //        text: $scope.symbol.code + ' (' + $scope.period + ')'
-            //    },
-            //    useHighStocks: true
-            //};
             $scope.quotes = quotes;
         }).catch(function (err) {
             console.log(err);

@@ -7,7 +7,7 @@ app.directive('chart', function() {
             symbol: '=',
             period: '='
         },
-        link: function($scope, element, attrs) {
+        link: function($scope) {
             $scope.$watch('quotes', function() {
                 $scope.chartConfig = {
                     options: {
@@ -33,6 +33,6 @@ app.directive('chart', function() {
                 };
             });
         },
-        template: '<highchart id="chart1" config="chartConfig" class="span10"></highchart>'
+        templateUrl: '/static/js/ng/directives/chart.html'
     };
 });
