@@ -325,35 +325,7 @@ app.controller('listPositions', ['$scope', '$http', 'getQuotes', 'getPositions',
     };
     $scope.create_chart = function() {
         if($scope.active_pos) {
-            getQuotes($scope.active_pos.symbol, $scope.period).then(function (quotes) {
-                $scope.chartConfig = {
-                    options: {
-                        chart: {
-                            type: 'candlestick',
-                            zoomType: 'x'
-                        },
-                        rangeSelector: {
-                            enabled: true
-                        },
-                        navigator: {
-                            enabled: true
-                        }
-                    },
-                    series: [{
-                        id: 1,
-                        data: quotes
-                    }, {
-                        type: 'flags',
-                        name: 'Position events',
-                        data: $scope.events,
-                        onSeries: 1,
-                        shape: 'squarepin'
-                    }],
-                    title: {
-                        text: $scope.active_pos.symbol + ' (' + $scope.period + ')'
-                    },
-                    useHighStocks: true
-                };
+            getQuotes($scope.active_pos.symbol, $scope.period).then(function(quotes) {
                 $scope.quotes = quotes;
             }).catch(function (err) {
                 console.log(err);
@@ -400,6 +372,7 @@ app.controller('listPositions', ['$scope', '$http', 'getQuotes', 'getPositions',
 app.controller('creatingPosition', ['$scope', '$http', 'getQuotes', 'allSymbols', 'getAccountData', function($scope, $http, getQuotes, allSymbols, getAccountData) {
     $scope.period = 'hour';
     $scope.type = 'buy';
+    $scope.quotes = [];
     $scope.position_data = {
         value: 0,
         sl: null,
@@ -459,7 +432,7 @@ app.controller('creatingPosition', ['$scope', '$http', 'getQuotes', 'allSymbols'
         }
     };
     $scope.create_chart = function() {
-        getQuotes($scope.symbol.code, $scope.period).then(function (quotes) {
+        getQuotes($scope.symbol.code, $scope.period).then(function(quotes) {
             $scope.quotes = quotes;
         }).catch(function (err) {
             console.log(err);

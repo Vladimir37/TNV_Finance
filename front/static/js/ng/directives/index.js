@@ -25,6 +25,12 @@ app.directive('chart', function() {
                     series: [{
                         id: 1,
                         data: $scope.quotes || []
+                    }, {
+                        type: 'flags',
+                        name: 'Position events',
+                        data: $scope.events,
+                        onSeries: 1,
+                        shape: 'squarepin'
                     }],
                     title: {
                         text: $scope.symbol + ' (' + $scope.period + ')'
