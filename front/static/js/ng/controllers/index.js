@@ -226,7 +226,7 @@ app.controller('listAccounts', ['$scope', '$http', 'getAccounts', function($scop
 app.controller('listPositions', ['$scope', '$http', 'getQuotes', 'getPositions', function($scope, $http, getQuotes, getPositions) {
     $scope.active = 1;
     $scope.active_pos = null;
-    $scope.period = 'day';
+    $scope.period = 'hour';
     $scope.change_active = function(active) {
         $scope.active = active;
         $scope.loading();
@@ -372,7 +372,7 @@ app.controller('listPositions', ['$scope', '$http', 'getQuotes', 'getPositions',
 app.controller('creatingPosition', ['$scope', '$http', 'getQuotes', 'allSymbols', 'getAccountData', function($scope, $http, getQuotes, allSymbols, getAccountData) {
     $scope.period = 'hour';
     $scope.type = 'buy';
-    $scope.quotes = [];
+    $scope.quotes = null;
     $scope.position_data = {
         value: 0,
         sl: null,

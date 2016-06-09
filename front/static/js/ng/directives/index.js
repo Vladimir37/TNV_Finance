@@ -24,7 +24,7 @@ app.directive('chart', function() {
                     },
                     series: [{
                         id: 1,
-                        data: $scope.quotes || []
+                        data: $scope.quotes || null
                     }, {
                         type: 'flags',
                         name: 'Position events',
