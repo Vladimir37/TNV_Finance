@@ -34,6 +34,7 @@ LOGIN_URL = '/login/'
 CELERYBEAT_SCHEDULER = "djcelery.schedulers.DatabaseScheduler"
 CELERY_ALWAYS_EAGER = True
 BROKER_BACKEND = "django"
+CELERY_IMPORTS = ['api']
 
 # Application definition
 
