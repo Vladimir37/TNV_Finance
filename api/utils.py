@@ -5,7 +5,7 @@ from django.shortcuts import render
 from django.http import HttpResponseRedirect, HttpResponse
 from django.contrib import auth
 from api.models import Account, SymbolType, Symbol, Position
-from googlefinance import getQuotes
+from ystockquote import get_price as getQuotes
 from datetime import datetime
 
 # users
@@ -166,8 +166,8 @@ def get_current(symbol_name):
         symbol = Symbol.objects.get(code=symbol_name)
         symbol_type = SymbolType.objects.get(pk=symbol.type_id)
         if symbol_type.currency:
-            symbol_name = 'CURRENCY:' + symbol_name
-        return float(getQuotes(symbol_name)[0]['LastTradePrice'])
+            symbol_name += '=X'
+        return float(getQuotes(symbol_name))
     except:
         return False
 
