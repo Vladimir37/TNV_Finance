@@ -1,21 +1,42 @@
 app.factory('indexValues', ['$http', function($http) {
-    var requested_symbols = ['EURUSD', 'GBPUSD', 'YHOO', 'MSFT', 'AUDUSD', 'DAX'];
+    var requested_symbols = [{
+        code: 'EURUSD',
+        name: 'EURUSD'
+    }, {
+        code: 'GBP',
+        name: 'GBPUSD'
+    }, {
+        code: 'YHOO',
+        name: 'YHOO'
+    }, {
+        code: 'MSFT',
+        name: 'MSFT'
+    }, {
+        code: 'AUD',
+        name: 'AUDUSD'
+    }, {
+        code: 'DAX',
+        name: 'DAX'
+    }];
     var symbols_req = {
-        symbols: JSON.stringify(requested_symbols)
+        symbols: JSON.stringify(_.pluck(requested_symbols, 'code'))
     };
     return $http({
         url: '/api/get_current_many',
         method: 'GET',
         params: symbols_req
     }).then(function(values) {
+        var num = 0;
         var values = values.data;
         for(var symbol in values) {
             var state = values[symbol].state;
             values[symbol] = {
                 price: values[symbol].price,
+                name: requested_symbols[num].name,
                 color: state > 0.5 ? 'red' : 'green',
                 arrow: state > 0.5 ? 'a_down.png' : 'a_up.png'
             }
+            num++;
         }
         return values;
     }).catch(function(err) {

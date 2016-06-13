@@ -1,7 +1,6 @@
 app.controller('indexSymbols', ['$scope', 'indexValues', function($scope, indexValues) {
     indexValues.then(function(data) {
         $scope.symbol_values = data;
-        console.log(data);
     }).catch(function(err) {
         console.log('ERROR');
         console.log(err);

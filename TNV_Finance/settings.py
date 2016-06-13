@@ -27,7 +27,7 @@ SECRET_KEY = 'q)w_j@z=2%#v%nf%k=!j0!tci2ph5y@_f2k6^6x@e57^56be*#'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = False
 
-ALLOWED_HOSTS = ['*']
+ALLOWED_HOSTS = ['tnv-finance.info']
 
 LOGIN_URL = '/login/'
 
